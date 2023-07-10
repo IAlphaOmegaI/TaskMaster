@@ -1,0 +1,99 @@
+/* Inconsolata */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;800&display=swap");
+
+@font-face {
+  font-family: "Betterfly";
+  src: url("../../assets/fonts/betterfly-font/betterfly.otf") format("opentype");
+  src: url("../../assets/fonts/betterfly-font/betterfly.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Aventi";
+  src: url("../../assets/fonts/aventi-font/Aventi-Regular.ttf")
+    format("truetype");
+}
+/* 
+html:root {
+  --primary-color: #a2b879;
+  --secondary-color: #e5e5f7;
+  --primary-background-color: #01050b;
+  --secondary-background-color: #14181b;
+  --ternary-background-color: rgb(74, 74, 74);
+  --text-color: #8fd016;
+  --primary-font: "Poppins";
+  --secondary-font: "Betterfly";
+  --ternary-font: "Aventi";
+  --primary-font-size: 3vw;
+  --secondary-font-size: 2vw;
+  --text-font-size: 1.1vw;
+  --max-width: 1920px;
+  --nav-width: 220px;
+  --padding: 1vw;
+  --height: 5vh;
+  --error: rgb(131, 24, 24);
+}
+
+html.dark-mode:root {
+  --primary-color: #5713b6;
+  --background-color: #232323;
+  --text-color: #9ef9f1;
+}
+
+@media screen and (min-width: 1450px) {
+  html:root {
+    --primary-font-size: calc((3 / 100) * 1450px);
+    --secondary-font-size: calc((2 / 100) * 1450px);
+    --text-font-size: calc((1.1 / 100) * 1450px);
+    --padding: calc((1 / 100) * 1450px);
+  }
+} */
+
+html:root {
+  --primary-color: #a2b879;
+  --secondary-color: #e5e5f7;
+  --primary-background-color: #01050b;
+  --secondary-background-color: #14181b;
+  --ternary-background-color: rgb(74, 74, 74);
+  --text-color: #8fd016;
+  --primary-font: "Poppins";
+  --secondary-font: "Betterfly";
+  --ternary-font: "Aventi";
+  --primary-font-size: 40px;
+  --secondary-font-size: 25px;
+  --text-font-size: 16px;
+  --max-width: 1920px;
+  --nav-width: 220px;
+  --padding: 1vw;
+  --height: 5vh;
+  --error: rgb(131, 24, 24);
+}
+
+html.dark-mode:root {
+  --primary-color: #5713b6;
+  --background-color: #232323;
+  --text-color: #9ef9f1;
+}
+/* some animation classes */
+/* animation for the navbar */
+.animate-in-margin-left-navbar {
+  animation: animate-in-margin-left-navbar 0.5s forwards;
+}
+@keyframes animate-in-margin-left-navbar {
+  0% {
+    margin-left: calc(-220px - var(--padding));
+  }
+  100% {
+    margin-left: 0;
+  }
+}
+/* animation for the app container */
+.animate-in-margin-bottom {
+  animation: animate-in-margin-bottom 0.5s forwards 0.5s;
+}
+@keyframes animate-in-margin-bottom {
+  0% {
+    margin-bottom: -100%;
+  }
+  100% {
+    margin-bottom: 0;
+  }
+}

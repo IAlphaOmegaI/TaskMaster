@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- outside stylesheets -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- => uicons -->
+        <link rel="stylesheet"
+            href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+        <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-brands/css/uicons-brands.css">
+        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+        <!-- custom stylesheets -->
+        <link rel="stylesheet" href="/static/styles/constants/nav-styles/index.css">
+        <link rel="stylesheet" href="/static/styles/constants/modal-styles/index.css">
+        <!-- custom stylesheet-routing -->
+        <link rel="stylesheet" href="/static/styles/home-styles/index.css">
+        <link rel="stylesheet" href="/static/styles/account-styles/index.css">
+        <link rel="stylesheet" href="/static/styles/todo-styles/index.css">
+        <title>TODO</title>
+    </head>
+
+    <body class="active">
+        <!-- the navbar -->
+        <nav class="nav default-nav">
+            <div class="nav-container">
+                <img class="nav-container-image" id="nav-profile-picture"
+                    src="/static/assets/images/overall/default-profile-picture.jpg" />
+                <h1 class="nav-container-title">Hi <span class="nav-container-title-user" id="nav-username">User</span>
+                </h1>
+                <span class="nav-container-subtitle">What's next?</span>
+            </div>
+            <div class="nav-items">
+                <h1 class="nav-items-item selected"><i class="fi fi-rr-edit nav-items-item-icon"></i>Notes<i
+                        class="nav-items-item-eleminate fi fi-sr-minus-circle"></i></h1>
+                <h1 class="nav-items-item"><i class="fi fi-rr-assept-document nav-items-item-icon"></i>ToDo-s<i
+                        class="nav-items-item-eleminate fi fi-sr-minus-circle"></i></h1>
+                <h1 class="nav-items-item"><i class="fi fi-rr-list-music nav-items-item-icon"></i>Music<i
+                        class="nav-items-item-eleminate fi fi-sr-minus-circle"></i></h1>
+                <h1 class="nav-items-item"><i class="fi fi-rr-camera-movie nav-items-item-icon"></i>Movies<i
+                        class="nav-items-item-eleminate fi fi-sr-minus-circle"></i></h1>
+                <h1 class="nav-items-item disabled"><i class="fi fi-rr-add-folder nav-items-item-icon"></i>Add a Folder
+                </h1>
+            </div>
+            <div class="nav-upgrade">
+                <h1 class="nav-upgrade-title">Upgrade and elevate your experience!</h1>
+                <div class="nav-upgrade-button">
+                    <h1 class="nav-upgrade-button-title">Upgrade to Premium</h1>
+                </div>
+            </div>
+            <div class="nav-settings">
+                <h1 class="nav-settings-item" id="nav-user" href="/account" data-link>
+                    <i class="fi fi-rr-enter nav-settings-item-icon" id="nav-user-icon"></i>
+                    <span class=" nav-settings-item-title">Log In</span>
+                </h1>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="container-header">
+                <div class="container-header-item" data-link id="back-out" style="display: none;" href="/">
+                    <i class="fi fi-rr-angle-circle-left"></i>
+                </div>
+                <div class="container-header-item" id="notifications">
+                    <i class="fi fi-rr-bell container-header-item-notification"></i>
+                    <div class="container-header-item-number"></div>
+                </div>
+
+            </div>
+            <div id="app"></div>
+        </div>
+
+        <div id="transition" class=""></div>
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-header-title" id="dialog-title"></span>
+                <i class="fi fi-rr-circle-xmark modal-header-icon" id="modal-exit"></i>
+            </div>
+            <div class="modal-body">
+                <span class="modal-body-title" id="dialog-message"></span>
+            </div>
+        </div>
+        <div class="backdrop"></div>
+        <!-- outside scripts -->
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+        <!-- firebase configuration-->
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js"></script>
+        <script type="module" src="/static/firebase/firebaseConfig.js"></script>
+        <!-- custom scripts -->
+        <script type="module" src="/static/js/index.js"></script>
+        <!-- constans -->
+        <script type="module" src="/static/js/consts.js"></script>
+        <!-- different route scripts -->
+        <script type="module" src="/static/js/routes/home.js"></script>
+        <script type="module" src="/static/js/routes/account.js"></script>
+        <script type="module" src="/static/js/routes/todo.js"></script>
+
+    </body>
+
+</html>

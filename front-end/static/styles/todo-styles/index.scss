@@ -1,0 +1,161 @@
+@import url(../constants/_variables.css);
+
+#app.todo {
+    position: relative;
+    padding: 5px 0 0;
+
+    .hashtags {
+        width: 100%;
+        height: calc(7% - 10px);
+        margin-bottom: 10px;
+        border-radius: 10px;
+        background-color: var(--secondary-background-color);
+        padding: 0 3px;
+        display: flex;
+        align-items: center;
+
+        &-list {
+            padding: 0 2.5px;
+            display: flex;
+            align-items: center;
+            gap: 2.5px;
+
+            &-item {
+                background-color: var(--primary-background-color);
+                height: calc(100% - 6px);
+                padding: 3px 5px;
+                color: var(--secondary-color);
+                font-family: var(--primary-font);
+                font-size: var(--text-font-size);
+                border-radius: 5px;
+                animation: hashtag-animation 0.3s forwards;
+            }
+
+            @keyframes hashtag-animation {
+                0% {
+                    scale: 0;
+                }
+
+                100% {
+                    scale: 1;
+                }
+            }
+
+        }
+
+        &-field {
+            background-color: var(--ternary-background-color);
+            width: 15%;
+            height: calc(100% - 6px);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            margin-right: 2.5px;
+
+
+            &-input {
+                resize: horizontal;
+                outline: none;
+                border: none;
+                color: var(--primary-background-color);
+                background-color: transparent;
+                font-size: var(--text-font-size);
+                font-family: var(--primary-font);
+                padding: 3px 5px 3px 0;
+                width: 90%;
+            }
+
+            &-icon {
+                font-size: var(--text-font-size);
+                color: var(--primary-background-color);
+                transition: color 0.2s ease;
+
+                &:hover {
+                    color: var(--text-color);
+                }
+            }
+        }
+    }
+
+    .note {
+        width: 100%;
+        height: 93%;
+        border-radius: 10px;
+        overflow: hidden;
+
+        &-area {
+            width: 100%;
+            height: 100%;
+            resize: vertical;
+            padding: var(--secondary-font-size);
+            border: none;
+            background-color: transparent;
+            position: relative;
+            z-index: 5;
+            outline: none;
+            font-size: var(--secondary-font-size);
+            background-attachment: local;
+            line-height: var(--secondary-font-size);
+            background-color: var(--secondary-color);
+
+            //pattern
+            &[data-pattern=pattern-1] {
+                background-image: linear-gradient(var(--primary-color) 2px, transparent 2px), linear-gradient(90deg, var(--primary-color) 2px, transparent 2px), linear-gradient(var(--primary-color) 1px, transparent 1px), linear-gradient(90deg, var(--primary-color) 1px, var(--secondary-color) 1px);
+                background-size: var(--secondary-font-size) var(--secondary-font-size), var(--secondary-font-size) var(--secondary-font-size), calc(var(--secondary-font-size) / 5) calc(var(--secondary-font-size) / 5), calc(var(--secondary-font-size) / 5) calc(var(--secondary-font-size) / 5);
+                background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+            }
+
+            &[data-pattern=pattern-2] {
+                background-size: var(--secondary-font-size) var(--secondary-font-size);
+                background-image: repeating-linear-gradient(0deg, var(--primary-color), var(--primary-color) 1px, var(--secondary-color) 1px, var(--secondary-color));
+            }
+
+            &[data-pattern=pattern-3] {
+                background-image: linear-gradient(var(--primary-color) 1px, transparent 1px), linear-gradient(to right, var(--primary-color) 1px, var(--secondary-color) 1px);
+                background-size: var(--secondary-font-size) var(--secondary-font-size);
+            }
+
+            &[data-pattern=pattern-4] {
+                background-image: radial-gradient(var(--primary-color) 0.5px, var(--secondary-color)0.5px);
+                background-size: var(--secondary-font-size) var(--secondary-font-size);
+            }
+
+            //color
+            &[data-note-color="red"] {
+                color: red;
+            }
+
+            &[data-note-color="green"] {
+                color: green;
+            }
+
+            &[data-note-color="blue"] {
+                color: blue;
+            }
+
+            &[data-note-color="black"] {
+                color: black;
+            }
+
+            //font
+            &[data-note-font=ballpoint] {
+                font-family: var(--primary-font);
+            }
+
+            &[data-note-font=pencil] {
+                font-family: var(--ternary-font);
+            }
+
+            &[data-note-font=fountain] {
+                font-family: var(--secondary-font);
+            }
+
+            &[data-note-font=marker] {
+                font-family: var(--primary-font);
+            }
+
+        }
+    }
+}

@@ -1,0 +1,52 @@
+@import url(../consts/_variables.css);
+
+#app.home {
+    position: relative;
+
+    .add {
+        position: absolute;
+        bottom: 0px;
+        right: var(--padding);
+        border-radius: 20px;
+        max-width: calc(var(--primary-font-size) * 1.5);
+        height: calc(var(--primary-font-size) * 1.5);
+        background-color: var(--primary-color);
+        overflow: hidden;
+        transition: all 1s ease;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        gap: 10px;
+
+
+        &-icon {
+            min-width: var(--primary-background-color);
+            left: calc(var(--primary-font-size) * 0.75);
+            font-size: var(--primary-font-size);
+            color: var(--primary-background-color);
+        }
+
+        &-title {
+            gap: 4px;
+            display: flex;
+            align-items: center;
+            // margin-left: calc(var(--primary-font-size) * 1.5);
+            opacity: 0;
+            transition: all 0.2s ease;
+            font-size: var(--text-font-size);
+            font-family: var(--primary-font);
+            font-weight: 400;
+
+        }
+
+        &:hover {
+            // width: calc(var(--primary-font-size) * 6.5) !important;
+            max-width: 100%;
+
+            .add-title {
+                opacity: 1 !important;
+                transition-delay: 0.2s;
+            }
+        }
+    }
+}
