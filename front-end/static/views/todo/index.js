@@ -1,7 +1,7 @@
 //the hashtag functionality, adding the hashtags into the hashtag bar
 const hashtagsReturner = (hashtag) => `<span class="hashtags-list-item">#${hashtag}</span>`;
 
-const todoReturner = (description, penColor, penType, notePaper, hashtagsArray) => /*html*/`  
+const todoReturner = (noteValue, {noteColor, noteFont, noteBackground}, hashtagsArray) => /*html*/`  
     <div id="app-contents" data-animation="animate-in-bottom-to-top">
         <div class="hashtags">
             <div class="hashtags-field">
@@ -13,8 +13,8 @@ const todoReturner = (description, penColor, penType, notePaper, hashtagsArray) 
             </div>
         </div>
         <div class="note">
-            <textarea class="note-area" data-pattern="${notePaper}" data-note-color="${penColor}" 
-            data-note-font="${penType}" id="note-value" value="${description}"></textarea>
+            <textarea class="note-area" data-pattern="${noteBackground}" data-note-color="${noteColor}" 
+            data-note-font="${noteFont}" id="note-value" value="${noteValue}"></textarea>
         </div>
     </div>
 `;

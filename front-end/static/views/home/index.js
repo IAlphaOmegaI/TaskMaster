@@ -1,4 +1,4 @@
-const noteThumbnailReturner = ( { noteBackground, }, noteName, noteId) => /*html*/`
+const noteThumbnailReturner = ( { noteBackground }, noteName, noteId) => /*html*/`
 <div class="note" data-id="${noteId}" data-link href="/todo/${noteId}">
   <span class="note-title">${noteName}</span>
   <img class="note-background" src="${noteBackground}"/>

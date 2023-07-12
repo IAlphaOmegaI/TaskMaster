@@ -28,7 +28,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 //inside exports
 import {
-  globals,
   storage,
   auth,
   db,
@@ -51,28 +50,27 @@ const accountStatusChangeHandler = (source) => {
     .children("i")
     .removeClass("fi-rr-enter")
     .addClass("fi fi-rr-exit");
+  settingsRef.removeAttr('data-link');
+  settingsRef.data('status', 'logged-in');
   settingsRef.children("span").text("Log Out");
-  //removing the ability to link anywhere since this button will only serve to log the user out now
-  settingsRef.off("click");
-  settingsRef
-    .attr("href", "")
-    .removeAttr("data-link")
-    .on("click", function () {
-      //reseting the local storage data
-      localStorage.removeItem("user");
-      signOut(auth);
-      $(this)
-        .children("i")
-        .addClass("fa-arrow-right-to-bracket")
-        .removeClass("fa-arrow-right-from-bracket");
-      nameRef.text("User");
-      profilePictureRef.attr("src", defaults.defaultProfilePicture);
-      settingsRef.children("span").text("Log In");
-      setTimeout(() => {
-        settingsRef.attr("href", "/account").attr("data-link", "");
-      }, 100);
-    });
 };
+$(document).on('click', '#nav-user[data-status="logged-in"]', function(){
+  const settingsRef = $(this);
+  const nameRef = $("#nav-username");
+  const profilePictureRef = $("#nav-profile-picture");
+  nameRef.text('User');
+  profilePictureRef.attr("src", defaults.defaultProfilePicture);
+  signOut(auth);
+  //changing the icon
+  settingsRef
+    .children("i")
+    .removeClass("fi-rr-exit")
+    .addClass("fi fi-rr-enter");
+  settingsRef.data('status', 'logged-out')
+  settingsRef.children("span").text("Log In");
+  settingsRef.attr('data-link', '');
+
+})
 //we trigger the function if we already had a save of the users data in the local storage
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -81,9 +79,9 @@ onAuthStateChanged(auth, async (user) => {
     try {
       const userData = await getDoc(docRef);
       accountStatusChangeHandler(userData.data());
-      //also setting up the globals variables
-      globals.verified = true;
-      globals.user = {
+      //also setting up the window.globals variables
+      window.globals.verified = true;
+      window.globals.user = {
         metaData: user.user,
         info: userData.data(),
       };
@@ -254,30 +252,50 @@ $(document).on("click", ".content-column-button", async function () {
           userData.password
         );
         //updating the global variables
-        globals.verified = true;
-        globals.user = {
+        window.globals.verified = true;
+        window.globals.user = {
           metaData: userCredential.user,
           info: {
             uid: userCredential.user.uid,
             name: userData.name,
             email: userData.email,
             profilePicture: hostedImageURL,
-            folders: {
-              Notes: [],
-              "ToDO-s": [],
-              Music: [],
-              Movies: [],
-            },
+            folders: [
+              {
+                name: 'Notes',
+                className: 'edit',
+                hashtagsArr: [],
+                noteIds: [],
+              },
+              {
+                name: 'ToDo-s',
+                className: 'assept-document',
+                hashtagsArr: [],
+                noteIds: [],
+              },
+              {
+                name: 'Music',
+                className: 'music',
+                hashtagsArr: [],
+                noteIds: [],
+              },
+              {
+                name: 'Movies',
+                className: 'camera-movie',
+                hashtagsArr: [],
+                noteIds: [],
+              },
+            ]
           },
         };
         //creating the new document with template data
         await setDoc(
           doc(db, "users", userCredential.user.uid),
-          globals.user.info
+          window.globals.user.info
         );
         // auth.stateChange will handle the updates
         console.log(
-          `%cCreated a new account and logged in as ${GLOBALS.user.info.name}`,
+          `%cCreated a new account and logged in as ${window.GLOBALS.user.info.name}`,
           `background-color: black; color: red;`
         );
       } catch (error) {
@@ -298,8 +316,8 @@ $(document).on("click", ".content-column-button", async function () {
         const docRef = doc(db, "users", userCredential.user.uid);
         const docSnap = await getDoc(docRef);
         //updating the global variables
-        globals.verified = true;
-        globals.user = {
+        window.globals.verified = true;
+        window.globals.user = {
           metaData: userCredential.user,
           info: docSnap.data(),
         };
@@ -307,7 +325,7 @@ $(document).on("click", ".content-column-button", async function () {
         //auth.stateChange will handle the updates
         //
         console.log(
-          `%cLogged in as ${GLOBALS.user.info.name}`,
+          `%cLogged in as ${window.globals.user.info.name}`,
           `background-color: black; color: cyan; width:100%; height:100%;`
         );
       } catch (error) {
@@ -323,26 +341,46 @@ async function signInWithGoogle() {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
     //updating the global variables
-    globals.verified = true;
-    globals.user = {
+    window.globals.verified = true;
+    window.globals.user = {
       metaData: user,
       info: {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
         profilePicture: user.photoURL,
-        folders: {
-          Notes: [],
-          "ToDO-s": [],
-          Music: [],
-          Movies: [],
-        },
+        folders: [
+          {
+            name: 'Notes',
+            className: 'edit',
+            hashtagsArr: [],
+            noteIds: [],
+          },
+          {
+            name: 'ToDo-s',
+            className: 'assept-document',
+            hashtagsArr: [],
+            noteIds: [],
+          },
+          {
+            name: 'Music',
+            className: 'music',
+            hashtagsArr: [],
+            noteIds: [],
+          },
+          {
+            name: 'Movies',
+            className: 'camera-movie',
+            hashtagsArr: [],
+            noteIds: [],
+          },
+        ]
       },
     };
     console.log(user.photoURL);
     // Save the profile picture URL in Firestore
     const userDocRef = doc(db, "users", user.uid);
-    await setDoc(userDocRef, globals.user.info, { merge: true });
+    await setDoc(userDocRef, window.globals.user.info, { merge: true });
 
     console.log("Signed in as:", user.displayName);
   } catch (error) {
