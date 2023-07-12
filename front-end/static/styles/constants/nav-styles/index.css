@@ -22,9 +22,6 @@ html body {
   max-width: var(--max-width);
   margin: auto;
 }
-html body.todo .default-nav {
-  display: none !important;
-}
 html body .nav {
   width: var(--nav-width);
   height: 100%;
@@ -35,7 +32,6 @@ html body .nav {
   justify-content: space-between;
   padding: 20px 10px;
   margin-left: calc(-220px - var(--padding));
-  transition: 0.2s ease all;
   position: relative;
 }
 html body .nav-select-title {

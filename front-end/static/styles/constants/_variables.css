@@ -73,27 +73,51 @@ html.dark-mode:root {
   --text-color: #9ef9f1;
 }
 /* some animation classes */
-/* animation for the navbar */
-.animate-in-margin-left-navbar {
-  animation: animate-in-margin-left-navbar 0.5s forwards;
+[data-animation="animate-in-left-to-right"] {
+  animation: animate-in-left-to-right 0.5s forwards;
 }
-@keyframes animate-in-margin-left-navbar {
+@keyframes animate-in-left-to-right {
   0% {
-    margin-left: calc(-220px - var(--padding));
+    transform: translateX(calc(-100% - var(--padding)));
   }
   100% {
-    margin-left: 0;
+    transform: translateX(0);
   }
 }
-/* animation for the app container */
-.animate-in-margin-bottom {
-  animation: animate-in-margin-bottom 0.5s forwards 0.5s;
+
+[data-animation="animate-out-right-to-left"] {
+  animation: animate-out-right-to-left 0.5s forwards;
 }
-@keyframes animate-in-margin-bottom {
+@keyframes animate-out-right-to-left {
   0% {
-    margin-bottom: -100%;
+    transform: translateX(0);
   }
   100% {
-    margin-bottom: 0;
+    transform: translateX(calc(-100% - var(--padding)));
+  }
+}
+
+[data-animation="animate-in-bottom-to-top"] {
+  animation: animate-in-bottom-to-top 0.5s forwards;
+}
+@keyframes animate-in-bottom-to-top {
+  0% {
+    transform: translateY(calc(100% + var(--padding)));
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+[data-animation="animate-out-top-to-bottom"] {
+  animation: animate-out-top-to-bottom 0.5s forwards !important;
+}
+@keyframes animate-out-top-to-bottom {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    /*the element itself + the header + the gap + the body margin*/
+    transform: translateY(calc(-100% - 5% - 10px - var(--padding)));
   }
 }

@@ -12,7 +12,7 @@ const randomHexGenerator = () =>
     .padStart(6, "0");
 //a different nav bar version thats custom made for this page
 const editNav = $(/*html*/ `    
-<nav class="nav edit-nav animate-in-margin-left-navbar">
+<nav class="nav edit-nav" data-animation="animate-in-left-to-right">
     <div class="nav-container nav-edit">
         <input type="text" class="nav-container-title nav-container-input" id="note-name" value="New Note" />
         <div class="nav-container-underline"></div>
@@ -261,7 +261,7 @@ $(document).on("keypress", "#hashtag-input", (e) => {
 });
 
 const todoHandler = () => {
-  editNav.insertAfter("nav");
+  $(".nav-parent").append(editNav);
 };
 //this file requires an execution uppon routing to this respective page so we export the function to the router and it'll execute there
 export { todoHandler };

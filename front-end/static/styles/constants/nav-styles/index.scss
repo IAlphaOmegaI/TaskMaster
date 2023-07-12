@@ -24,11 +24,11 @@ html {
         margin: auto;
 
         //
-        &.todo {
-            .default-nav {
-                display: none !important;
-            }
-        }
+//         &.todo {
+      //       .default-nav {
+      //           display: none !important;
+      //       }
+      //   }
 
         .nav {
             width: var(--nav-width);
@@ -40,11 +40,10 @@ html {
             justify-content: space-between;
             padding: 20px 10px;
             margin-left: calc(-220px - var(--padding));
-            transition: 0.2s ease all;
+            // transition: 0.2s ease all;
             position: relative;
 
             &-select {
-
                 &-title {
                     font-size: var(--text-font-size);
                     color: var(--secondary-color);

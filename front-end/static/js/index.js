@@ -1,36 +1,39 @@
 import View from "./views/View.js";
+
 import { todoHandler } from "/static/js/routes/todo.js";
 //a history array that saves all the pages link the user visited
 const historyArr = [];
+let lastHistoryState;
 //
-const transitioner = $('#transition');
-const backOut = $('#back-out');
+const backOut = $("#back-out");
+
 //
 const routes = {
   "/": {
     route: "Home",
     path: "/",
     navbar: true,
-    transition: true,
   },
+
   "/todo/:id": {
     route: "Todo",
     path: "/todo/:id",
     navbar: true,
-    transition: false,
     handler: todoHandler,
   },
+
   account: {
     route: "Account",
     path: "/account",
     navbar: false,
-    transition: true,
   },
 };
+
 const navigateTo = (url) => {
   history.pushState(null, null, url);
   router();
 };
+
 //
 const pathToRegEx = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -52,17 +55,13 @@ const getParams = (match) => {
 const router = async () => {
   const potentialMatches = Object.keys(routes).map((key, i) => {
     const route = routes[key];
+
     return {
-      route: route.route,
-      path: route.path,
+      ...route,
       result: location.pathname.match(pathToRegEx(route.path)),
-      navbar: route.navbar,
-      transition: route.transition,
-      handler: route.handler,
     };
   });
-  //removing the custom nav-bars
-  $("nav:not('.default-nav')").remove();
+
   //
   const match = potentialMatches.find(
     (potentialMatches) => potentialMatches.result !== null
@@ -71,37 +70,49 @@ const router = async () => {
     result: [location.pathname],
   };
   //getting the last history state
-  const lastHistoryState = historyArr[historyArr.length - 1];
-  match.path != '/' ? backOut.show() : backOut.hide();
+  lastHistoryState = historyArr[historyArr.length - 1];
+  //
+  match.path != "/" ? backOut.show() : backOut.hide();
   //pushing the history
   historyArr.push(match.path);
-  backOut.off('click');
-  backOut.on('click',()=>{
-    backOut.attr('href', lastHistoryState);
-    historyArr.pop();
-  })
-  // //the transitioner
-  // match.transition ? 
-  //   transitioner.addClass('active') : null
   //the constructor
   const view = new View(match.route, getParams(match));
   const html = await view.getHtml(match.route.toLowerCase());
-  // 
-  $("#app")
-  .attr("class", "")
-  .addClass(match.route.toLowerCase())
-  .html(html.appContents);
+
   //
-  $('body').attr('class','').addClass(match.route.toLowerCase())
-  //
-  setTimeout(() => {
-    transitioner.removeClass('active');
-  }, 500);
-  match.navbar === false ? $('body').removeClass('active') : $('body').addClass('active'); 
-  match.handler ? match.handler() : null;
+  //the transition handler
+  if (historyArr.length !== 1) {
+    //=> the navbar transition
+    $(".nav").attr("data-animation", "animate-out-right-to-left");
+    //=> the container transition
+    $("#app-contents").attr("data-animation", "animate-out-top-to-bottom");
+  }
+
+  setTimeout(
+    () => {
+      //removing the custom nav-bars
+      $("nav:not('.default-nav')").remove();
+      //
+      $("#app")
+        .attr("class", "")
+        .addClass(match.route.toLowerCase())
+        .html(html.appContents);
+      //
+      $("body").attr("class", "").addClass(match.route.toLowerCase());
+      //extra attributes
+      match.navbar === false
+        ? $("body").removeClass("active")
+        : $("body").addClass("active");
+      match.handler ? match.handler() : null;
+    },
+
+    500
+  );
 };
+
 router();
 $(window).on("popstate", router);
+
 $(document).on("click", "[data-link]", function (e) {
   e.preventDefault();
   const link = $(this).attr("href");
