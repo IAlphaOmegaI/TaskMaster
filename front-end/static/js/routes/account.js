@@ -69,6 +69,9 @@ $(document).on('click', '#nav-user[data-status="logged-in"]', function(){
   settingsRef.data('status', 'logged-out')
   settingsRef.children("span").text("Log In");
   settingsRef.attr('data-link', '');
+  //also updating the globals
+  window.globals.user = defaults.templateUserData,
+  window.globals.verified = false;
 
 })
 //we trigger the function if we already had a save of the users data in the local storage

@@ -3,45 +3,58 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase
 import { getAuth, GoogleAuthProvider, } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 import { getStorage, } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 //we set the tempalte data into the local storage if there isnt any
-if(!localStorage.globals){
-    localStorage.globals = {
-        user: {
-            metaData: null,
-            info: {
-              uid: userCredential.user.uid,
-              name: 'User',
-              email: 'local.user@task-master.com',
-              profilePicture: hostedImageURL,
-              folders: [
-                {
-                  name: 'Notes',
-                  className: 'edit',
-                  hashtagsArr: [],
-                  noteIds: [],
-                },
-                {
-                  name: 'ToDo-s',
-                  className: 'assept-document',
-                  hashtagsArr: [],
-                  noteIds: [],
-                },
-                {
-                  name: 'Music',
-                  className: 'music',
-                  hashtagsArr: [],
-                  noteIds: [],
-                },
-                {
-                  name: 'Movies',
-                  className: 'camera-movie',
-                  hashtagsArr: [],
-                  noteIds: [],
-                },
-              ]
+//genrating a random hexadecimal number to save in the local storage in case user isnt logged in, we can also sync to firebase when the user logs in with this id
+const randomHexGenerator = () =>
+  Math.floor(Math.random() * 16777216)
+    .toString(16)
+    .padStart(6, "0");
+//
+const defaults = {
+      defaultProfilePicture: '/static/assets/images/overall/default-profile-picture.jpg',
+      templateUserData: {
+        metaData: null,
+        info: {
+          uid: randomHexGenerator(),
+          name: 'User',
+          email: 'local.user@task-master.com',
+          profilePicture: '/static/assets/images/overall/default-profile-picture.jpg',
+          folders: [
+            {
+              name: 'Notes',
+              className: 'edit',
+              hashtagsArr: [],
+              noteIds: [],
             },
-          },
+            {
+              name: 'ToDo-s',
+              className: 'assept-document',
+              hashtagsArr: [],
+              noteIds: [],
+            },
+            {
+              name: 'Music',
+              className: 'music',
+              hashtagsArr: [],
+              noteIds: [],
+            },
+            {
+              name: 'Movies',
+              className: 'camera-movie',
+              hashtagsArr: [],
+              noteIds: [],
+            },
+          ]
+        },
+      },
+}
+//
+if(!localStorage.globals){
+    localStorage.globals = JSON.stringify({
+        verified: false,
+        user: defaults.templateUserData,  
         notes: {},
-    }
+        noteLocation: 'Notes',
+    })
 }
 //GLOBAL VARIABLES AND CHANGE MONITORING
 //init of the private var
@@ -62,7 +75,5 @@ const auth = getAuth();
 const db = getFirestore();
 const provider = new GoogleAuthProvider();
 //
-const defaults = {
-    defaultProfilePicture: '/static/assets/images/overall/default-profile-picture.jpg',
-}
-export { storage, auth, provider, db, defaults,}
+
+export { storage, auth, provider, db, defaults, randomHexGenerator}

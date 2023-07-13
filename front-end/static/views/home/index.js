@@ -1,5 +1,5 @@
-const noteThumbnailReturner = ( { noteBackground }, noteName, noteId) => /*html*/`
-<div class="note" data-id="${noteId}" data-link href="/todo/${noteId}">
+const noteThumbnailReturner = ( { noteBackground }, noteName, noteId, noteLocation) => /*html*/`
+<div class="note" data-id="${noteId}" data-link href="/todo/${noteId}" data-for="${noteLocation}">
   <span class="note-title">${noteName}</span>
   <img class="note-background" src="${noteBackground}"/>
   <div class="note-go">
@@ -7,10 +7,15 @@ const noteThumbnailReturner = ( { noteBackground }, noteName, noteId) => /*html*
   </div>
 </div>
 `
-const homeReturner = notesArray => /*html*/`
+const hashtagsReturner = (hashtag, location) => `<span class="hashtag" data-for="${location}">#${hashtag}</span>`;
+
+const homeReturner = (notesArray, hashtagsArray) => /*html*/`
 <div id="app-contents" data-animation="animate-in-bottom-to-top">
+    <div class="hashtags">
+      ${hashtagsArray.map(({hashtagLocation, hashtag}) => hashtagsReturner(hashtag, hashtagLocation))}
+    </div>
     <div class="notes">
-        ${notesArray.map(({noteConfigs, noteValue, noteName, noteId}) => noteThumbnailReturner(noteConfigs, noteName, noteId))}
+        ${notesArray.map(({noteConfigs, noteValue, noteName, noteId, noteLocation}) => noteThumbnailReturner(noteConfigs, noteName, noteId, noteLocation))}
     </div>
     <div class="add" data-link href="/todo/new-note">
         <i class="fi fi-sr-add-document add-icon"></i>

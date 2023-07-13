@@ -31,7 +31,6 @@ html body .nav {
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 10px;
-  margin-left: calc(-220px - var(--padding));
   position: relative;
 }
 html body .nav-select-title {
@@ -365,7 +364,6 @@ html body .nav-settings-item-title {
 }
 html body .container {
   width: 100%;
-  margin-left: var(--padding);
 }
 html body .container-header {
   display: flex;

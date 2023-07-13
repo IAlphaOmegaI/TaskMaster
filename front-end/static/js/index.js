@@ -1,6 +1,6 @@
 import View from "./views/View.js";
 
-import { todoHandler } from "/static/js/routes/todo.js";
+// import { todoHandler } from "/static/js/routes/todo.js";
 //a history array that saves all the pages link the user visited
 const historyArr = [];
 let lastHistoryState;
@@ -19,7 +19,6 @@ const routes = {
     route: "Todo",
     path: "/todo/:id",
     navbar: true,
-    handler: todoHandler,
   },
 
   account: {
@@ -77,37 +76,29 @@ const router = async () => {
   historyArr.push(match.path);
   //the constructor
   const view = new View(match.route, getParams(match));
-  const html = await view.getHtml(match.route.toLowerCase());
-
+  const {appContents, navContents} = await view.getHtml(match.route.toLowerCase());
   //
+  console.warn(navContents)
   //the transition handler
-  if (historyArr.length !== 1) {
+  if (historyArr.length > 1) {
     //=> the navbar transition
     $(".nav").attr("data-animation", "animate-out-right-to-left");
-    //=> the container transition
-    $("#app-contents").attr("data-animation", "animate-out-top-to-bottom");
+    $("#app-contents").attr("data-animation", "animate-out-top-to-bottom"); 
   }
-
   setTimeout(
     () => {
-      //removing the custom nav-bars
-      $("nav:not('.default-nav')").remove();
-      //
       $("#app")
         .attr("class", "")
         .addClass(match.route.toLowerCase())
-        .html(html.appContents);
+        .html(appContents);
+      //
+      $("#nav")
+        .attr("class", 'navigation')
+        .addClass(match.route.toLowerCase())
+        .html(navContents);
       //
       $("body").attr("class", "").addClass(match.route.toLowerCase());
-      //extra attributes
-      match.navbar === false
-        ? $("body").removeClass("active")
-        : $("body").addClass("active");
-      match.handler ? match.handler() : null;
-    },
-
-    500
-  );
+    }, 500 );
 };
 
 router();

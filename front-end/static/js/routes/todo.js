@@ -3,13 +3,9 @@
 //
 //outside exports
 
-// import { } from "/static/js/consts.js";
+import { randomHexGenerator } from "/static/js/consts.js";
 
-//genrating a random hexadecimal number to save in the local storage in case user isnt logged in, we can also sync to firebase when the user logs in with this id
-const randomHexGenerator = () =>
-  Math.floor(Math.random() * 16777216)
-    .toString(16)
-    .padStart(6, "0");
+
 // //a different nav bar version thats custom made for this page
 // const editNav = $(/*html*/ `    
 // <nav class="nav edit-nav" data-animation="animate-in-left-to-right">
@@ -238,9 +234,12 @@ $(document).on("click", "#note-save", async function () {
     noteData.id = randomHexGenerator();
   }
   //
-  window.globals.user.info.folders.forEach(({name})=>{
-    if(name.toLowerCase() == noteLocation.toLowerCase())
-      this.push(noteData.id)
+  window.globals.user.info.folders.every(({name, noteIds})=>{
+    if(name.toLowerCase().trim() == noteLocation){
+      noteIds.push(noteData.id);
+      return false;
+    }
+    return true;
   })
   window.globals.notes[noteData.id] = noteData;
   //we also need to add this note id to the array of the notes 

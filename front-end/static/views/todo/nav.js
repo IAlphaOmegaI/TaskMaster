@@ -1,7 +1,7 @@
-const editNav = $(/*html*/ `    
-    <nav class="nav edit-nav" data-animation="animate-in-left-to-right">
+const editNavReturner = (noteName, {noteFont, noteColor, noteBackground, notePaper}) => (/*html*/ `    
+    <div class="nav edit-nav" data-animation="animate-in-left-to-right">
         <div class="nav-container nav-edit">
-            <input type="text" class="nav-container-title nav-container-input" id="note-name" value="New Note" />
+            <input type="text" class="nav-container-title nav-container-input" id="note-name" value="${noteName}" />
             <div class="nav-container-underline"></div>
             <h1 class="nav-container-text">Choose a background for your note!</h1>
         </div>
@@ -94,5 +94,6 @@ const editNav = $(/*html*/ `
                 <i class="fi fi-rr-floppy-disk-circle-arrow-right"  id="note-save"></i>
             </h1>
         </div>
-    </nav>
+</div>
 `);
+export default editNavReturner;

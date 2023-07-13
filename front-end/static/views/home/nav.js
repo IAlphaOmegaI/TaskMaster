@@ -5,15 +5,14 @@ const navItemReturner = (name, className, hashtagsArr, i) => /*html*/`
     <i class="nav-items-item-eleminate fi fi-sr-minus-circle"></i>
 </h1>`
 const defaultNavReturner = ({name, profilePicture, folders}, loggedInOrNot) => /*html*/`
-    <nav class="navigation default-nav">
-        <div class="nav" data-animation="animate-in-left-to-right">
+        <div class="nav default-nav" data-animation="animate-in-left-to-right">
             <div class="nav-container">
                 <img class="nav-container-image" id="nav-profile-picture" src="${profilePicture}" />
                 <h1 class="nav-container-title">Hi <span class="nav-container-title-user" id="nav-username">${name}</span></h1>
                 <span class="nav-container-subtitle">What's next?</span>
             </div>
             <div class="nav-items">
-            ${folders.map(({name, className, hashtagsArr}, i) => navItemReturner(name, className, hashtagsArr, i))}
+            ${folders.map(({name, className, hashtagsArr}, i) => navItemReturner(name, className, hashtagsArr, i)).join('')}
                 <h1 class="nav-items-item disabled"><i class="fi fi-rr-add-folder nav-items-item-icon"></i>Add a Folder</h1>
             </div>
             <div class="nav-upgrade">
@@ -29,7 +28,6 @@ const defaultNavReturner = ({name, profilePicture, folders}, loggedInOrNot) => /
                 </h1>
             </div>
         </div>
-    </nav>
 `
 export default defaultNavReturner;
 // /static/assets/images/overall/default-profile-picture.jpg

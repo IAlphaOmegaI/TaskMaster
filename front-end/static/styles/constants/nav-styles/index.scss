@@ -13,7 +13,6 @@ i {
 html {
     height: 100%;
     background-color: var(--primary-background-color);
-
     body {
         height: 100%;
         padding: var(--padding);
@@ -22,14 +21,6 @@ html {
         overflow: hidden;
         max-width: var(--max-width);
         margin: auto;
-
-        //
-//         &.todo {
-      //       .default-nav {
-      //           display: none !important;
-      //       }
-      //   }
-
         .nav {
             width: var(--nav-width);
             height: 100%;
@@ -39,8 +30,6 @@ html {
             flex-direction: column;
             justify-content: space-between;
             padding: 20px 10px;
-            margin-left: calc(-220px - var(--padding));
-            // transition: 0.2s ease all;
             position: relative;
 
             &-select {
@@ -445,9 +434,6 @@ html {
 
         .container {
             width: 100%;
-            margin-left: var(--padding);
-
-
             &-header {
                 display: flex;
                 justify-content: space-between;
