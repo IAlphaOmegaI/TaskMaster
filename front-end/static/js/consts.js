@@ -65,7 +65,8 @@ Object.defineProperty(window, 'globals', {
     },
     set(value) {
         _globals = value;
-        localStorage.globals = JSON.stringify(globals)
+        console.log('%cState updated', 'backgroundColor:grey, color:blue')
+        localStorage.globals = JSON.stringify(value)
     }
 })
 //the init of global variables, here we'll need to set some default values instead of empty and null

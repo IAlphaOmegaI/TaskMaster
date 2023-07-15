@@ -15,7 +15,7 @@ const homeReturner = (notesArray, hashtagsArray) => /*html*/`
       ${hashtagsArray.map(({hashtagLocation, hashtag}) => hashtagsReturner(hashtag, hashtagLocation))}
     </div>
     <div class="notes">
-        ${notesArray.map(({noteConfigs, noteValue, noteName, noteId, noteLocation}) => noteThumbnailReturner(noteConfigs, noteName, noteId, noteLocation))}
+        ${notesArray.map(({noteConfigs, noteValue, noteName, id, noteLocation}) => noteThumbnailReturner(noteConfigs, noteName, id, noteLocation))}
     </div>
     <div class="add" data-link href="/todo/new-note">
         <i class="fi fi-sr-add-document add-icon"></i>

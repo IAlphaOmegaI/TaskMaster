@@ -21,42 +21,66 @@ const dynamicViewInteraface = {
     //when you come here you come with an id from th link that you were routed from
     //so for example you pressed the link /todo/192 so that 192 is the id that we'll go and request to firebase
     //here we go request the specific doc
-    const docRef = doc(db, "notes", id);
-    const docData = await getDoc(docRef);
+    const loggedInOrNot = window.globals.verified;
     let appContents, navContents;
-    if(docData.exists()){
-      //here the document itself exists
-      //the app func here is the note builder in /todo/:id
-      //this is a typical docData response
-      // {
-      //   noteConfigs: {
-      //     noteColor: noteColor,
-      //     noteFont: noteFont,
-      //     noteBackground: noteBackground,
-      //     notePaper: notePaper,
-      //   },
-      //   noteName: noteName,
-      //   noteValue: noteValue,
-      //   hashtagsArray: [],
-      //   noteId: '',
-      // };
-      const {noteName, noteValue, hashtagsArray, noteId, noteConfigs } = docData.data();
-      appContents = appFunc(noteValue, noteConfigs, hashtagsArray);
-      navContents = navFunc(noteName, noteConfigs)
-    }else{
-      //the document doesen't exist
-      history.pushState(null, null, 'new-note');
-      appContents = appFunc('', {
-        noteBackground: 'pattern-1',
-        noteColor: 'black',
-        noteFont: 'ballpoint'
-      }, []);
-      navContents = navFunc('New Note', {
-        noteBackground: 'pattern-1',
-        noteColor: 'black',
-        noteFont: 'ballpoint'
-      })
-
+    if(loggedInOrNot){
+      const docRef = doc(db, "notes", id);
+      const docData = await getDoc(docRef);
+      if(docData.exists()){
+        //here the document itself exists
+        //the app func here is the note builder in /todo/:id
+        //this is a typical docData response
+        // {
+        //   noteConfigs: {
+        //     noteColor: noteColor,
+        //     noteFont: noteFont,
+        //     noteBackground: noteBackground,
+        //     notePaper: notePaper,
+        //   },
+        //   noteName: noteName,
+        //   noteValue: noteValue,
+        //   hashtagsArray: [],
+        //   noteId: '',
+        // };
+        const {noteName, noteValue, hashtagsArray, noteConfigs } = docData.data();
+        appContents = appFunc(noteValue, noteConfigs, hashtagsArray , id);
+        navContents = navFunc(noteName, noteConfigs)
+      }else{
+        //the document doesen't exist
+        history.pushState(null, null, 'new-note');
+        appContents = appFunc('', {
+          noteBackground: 'pattern-1',
+          noteColor: 'black',
+          noteFont: 'ballpoint'
+        }, [], 'new-note');
+        navContents = navFunc('New Note', {
+          noteBackground: 'pattern-1',
+          noteColor: 'black',
+          noteFont: 'ballpoint'
+        })
+      }
+    } else {
+      //user is not logged in
+      const noteData = window.globals.notes[id];
+       if(noteData){
+        //note exists
+        const {noteName, noteValue, hashtagsArray, noteConfigs } = noteData;
+        appContents = appFunc(noteValue, noteConfigs, hashtagsArray , id);
+        navContents = navFunc(noteName, noteConfigs)
+       } else {
+        //note doesen't exist
+        history.pushState(null, null, 'new-note');
+        appContents = appFunc('', {
+          noteBackground: 'pattern-1',
+          noteColor: 'black',
+          noteFont: 'ballpoint'
+        }, [], 'new-note');
+        navContents = navFunc('New Note', {
+          noteBackground: 'pattern-1',
+          noteColor: 'black',
+          noteFont: 'ballpoint'
+        })
+       }
     }
     //we should also deal with the navbar
     
@@ -106,30 +130,43 @@ const dynamicViewInteraface = {
     // },
     //we firstly pull the information 
     const userInfo = window.globals.user.info;
+    const loggedInOrNot = window.globals.verified;
     //we should merge all the arrays into one
     const hashtagsSet = new Set();
     const notesArray =  [];
     //
-    for ( let folder of userInfo.folders) {
-      const folderLocation = folder.name;
-      const folderNoteIdsArray = folder.noteIds;
-      for ( let id of folderNoteIdsArray) {
-        //we go and request the id in the firebase
-        const docRef = doc(db, "notes", id);
-        const docData = await getDoc(docRef);
-        //the doc will always exist since it was in the noteIds array in the first place
-        notesArray.push({
-          ...docData.data(),
-          noteLocation: folderLocation,
-        });
-        //we also get all the note hashtags and form a set with them
-        const {hashtagsArray} = docData.data();
-        hashtagsArray.forEach( hashtag => hashtagsSet.add({
-          hashtagLocation: folderLocation,
-          value: hashtag.toLowerCase(),
-        }))
+      for ( let folder of userInfo.folders) {
+        const folderLocation = folder.name;
+        const folderNoteIdsArray = folder.noteIds;
+        for ( let id of folderNoteIdsArray) {
+          //we go and request the id in the firebase
+          if(loggedInOrNot){
+              const docRef = doc(db, "notes", id);
+              const docData = await getDoc(docRef);
+              //the doc will always exist since it was in the noteIds array in the first place
+              notesArray.push({
+                ...docData.data(),
+                noteLocation: folderLocation,
+              });
+              //we also get all the note hashtags and form a set with them
+              const {hashtagsArray} = docData.data();
+              hashtagsArray.forEach( hashtag => hashtagsSet.add({
+                hashtagLocation: folderLocation,
+                value: hashtag.toLowerCase(),
+              }))
+            } else {
+              //user is not linked to the database
+              notesArray.push(window.globals.notes[id]);
+              const {hashtagsArray } = window.globals.notes[id];
+              hashtagsArray.forEach( hashtag => hashtagsSet.add({
+                hashtagLocation: folderLocation,
+                value: hashtag.toLowerCase(),
+              }))
+            }
+
+          } 
       }
-    }
+  
     return{
       appContents : appFunc(notesArray, Array.from(hashtagsSet)),
       //and also dealing with the navbar

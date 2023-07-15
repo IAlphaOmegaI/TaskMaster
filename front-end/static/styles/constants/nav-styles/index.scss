@@ -158,20 +158,26 @@ html {
                 border-radius: 10px;
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
                 overflow: hidden;
+                height: calc(var(--height) * 3);
+                position: relative;
 
                 &.horizontal {
                     flex-direction: column;
+                    height: calc(var(--height) * 4);
                 }
 
                 &-track {
                     width: 100%;
-                    height: calc(var(--height) * 3);
+                    height: 100%;
                     display: flex;
-                    overflow: hidden;
+                    transition: transform 0.2s ease;
                     gap: 4px;
                     border-radius: 10px;
+
+                    &.horizontal{
+                        height: 87%;
+                    }
 
                     &-item {
                         border-radius: 10px;
@@ -260,6 +266,19 @@ html {
                     gap: 1px;
                     align-items: center;
                     margin-top: 5px;
+                    position: absolute;
+
+                    &.vertical{
+                        transform: translateY(-50%);
+                        top: 50%;
+                        right: 0;
+                    }
+                    &.horizontal{
+                        bottom: 0;
+                        transform: translateX(-50%);
+                        left: 50%;
+                    }
+                    
 
                     &-control {
                         color: white;

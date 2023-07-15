@@ -31,7 +31,7 @@ const editNavReturner = (noteName, {noteFont, noteColor, noteBackground, notePap
                 </div>
             </div>
             <div class="nav-slider-controls vertical">
-                <i class="nav-slider-controls-control fa-solid fa-chevron-down" data-target="vertical" data-direction="+"></i>
+                <i class="nav-slider-controls-control fa-solid fa-chevron-down" data-target="vertical" data-direction="-"></i>
                 <div class="nav-slider-controls-pagnation">
                     <div class="nav-slider-controls-pagnation-item selected"></div>
                     <div class="nav-slider-controls-pagnation-item"></div>
@@ -39,7 +39,7 @@ const editNavReturner = (noteName, {noteFont, noteColor, noteBackground, notePap
                     <div class="nav-slider-controls-pagnation-item"></div>
                     <div class="nav-slider-controls-pagnation-item"></div>
                 </div>
-                <i class="nav-slider-controls-control fa-solid fa-chevron-down" data-direction="-" data-target="vertical"></i>
+                <i class="nav-slider-controls-control fa-solid fa-chevron-down" data-direction="+" data-target="vertical"></i>
             </div>
         </div>
         <div class="nav-container nav-edit"><h1 class="nav-container-text">Type of Pen:</h1> </div>
@@ -71,21 +71,15 @@ const editNavReturner = (noteName, {noteFont, noteColor, noteBackground, notePap
             <div class="nav-slider-track-item pattern-2" data-pattern="pattern-2"></div>
             <div class="nav-slider-track-item pattern-3" data-pattern="pattern-3"></div>
             <div class="nav-slider-track-item pattern-4" data-pattern="pattern-4"></div>
-            <div class="nav-slider-track-item field">
-                <input type="file" accept="image/*" name="nav-slider-track-item-input" id="nav-slider-track-item-input"
-                    class="nav-slider-track-item-input" style="display: none;" />
-                <label for="nav-slider-track-item-input" class="nav-slider-track-item-title">Choose an Image</label>
-                <img src="/static/assets/images/default-profile-picture.jpg"  class="nav-slider-track-item-preview" id="nav-slider-track-item-preview">
-            </div>
         </div>
         <div class="nav-slider-controls horizontal">
-            <i class="nav-slider-controls-control fa-solid fa-chevron-right" data-direction="+" data-target="horizontal"></i>
+            <i class="nav-slider-controls-control fa-solid fa-chevron-right" data-direction="-" data-target="horizontal"></i>
             <div class="nav-slider-controls-pagnation">
                 <div class="nav-slider-controls-pagnation-item selected"></div>
                 <div class="nav-slider-controls-pagnation-item"></div>
                 <div class="nav-slider-controls-pagnation-item"></div>
             </div>
-            <i class="nav-slider-controls-control fa-solid fa-chevron-right" data-direction="-" data-target="horizontal"></i>
+            <i class="nav-slider-controls-control fa-solid fa-chevron-right" data-direction="+" data-target="horizontal"></i>
         </div>
         </div>
         <div class="nav-settings nav-edit">
