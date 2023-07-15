@@ -18,32 +18,32 @@ const defaults = {
           name: 'User',
           email: 'local.user@task-master.com',
           profilePicture: '/static/assets/images/overall/default-profile-picture.jpg',
-          folders: [
-            {
+          folders: {
+            'Notes': {
               name: 'Notes',
               className: 'edit',
               hashtagsArr: [],
-              noteIds: [],
+              noteIds: {},
             },
-            {
+            'ToDo-s': {
               name: 'ToDo-s',
               className: 'assept-document',
               hashtagsArr: [],
-              noteIds: [],
+              noteIds: {},
             },
-            {
+            'Music': {
               name: 'Music',
               className: 'music',
               hashtagsArr: [],
-              noteIds: [],
+              noteIds: {},
             },
-            {
+            'Movies': {
               name: 'Movies',
               className: 'camera-movie',
               hashtagsArr: [],
-              noteIds: [],
+              noteIds: {},
             },
-          ]
+          }
         },
       },
 }
@@ -65,7 +65,7 @@ Object.defineProperty(window, 'globals', {
     },
     set(value) {
         _globals = value;
-        console.log('%cState updated', 'backgroundColor:grey, color:blue')
+        console.log('%cState updated', 'backgroundColor:grey; color:blue')
         localStorage.globals = JSON.stringify(value)
     }
 })

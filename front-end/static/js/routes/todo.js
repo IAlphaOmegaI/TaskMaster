@@ -3,7 +3,7 @@
 //
 //outside exports
 import { randomHexGenerator } from "/static/js/consts.js";
-//the globals
+// * the globals
 const globals = window.globals;
 
 //the click function for the pen and color chooser
@@ -54,7 +54,6 @@ $(document).on("click", ".nav-slider-controls-control", function () {
   ) {
     pagnationCounter = pagnationCounter + parseInt(direction + 1);
     target.css('transform', `translate${targetValue}(calc(${existingValue - parseInt(`${direction}${value}`)}% - ${pagnationCounter * 4}px))`);
-    // console.log(`calc(${existingValue - parseInt(`${direction}${value}`)}% - ${pagnationCounter * 4}px)`)
     sliderInterface[orientation].isSliderAnimating = true;
     //also the selector
     //and we should update the object with the new value for the pagnation counter
@@ -68,7 +67,7 @@ $(document).on("click", ".nav-slider-controls-control", function () {
 });
 
 
-//thes ehandles the note background and paper background changes
+//this handles the note background and paper background changes
 //the interface for the sliders
 const sliderFuncInterface = {
   "paper-background": (pattern) => {
@@ -84,30 +83,28 @@ $(document).on("click", ".nav-slider-track-item:not(.selected)", function () {
   const pattern = s.data("pattern");
   sliderFuncInterface[role](pattern);
 });
+
+
+// * handling the note saving
+
+
 $(document).on("click", "#note-save", async function () {
   //getting the values to save
   const noteName = $("#note-name").val();
   const noteValue = $("#note-value").val();
   //
-  const noteLocation = window.globals.noteLocation;
+  const noteLocation = globals.noteLocation;
   //
-  const noteBackground = $(
-    '.nav-slider[data-function="note-background"] .nav-slider-track-item.selected'
-  ).children('img').attr('src');
-  const notePaper = $(
-    '.nav-slider[data-function="note-paper"] .nav-slider-track-item.selected'
-  ).data("pattern");
-  const noteColor = $(
-    '.nav-select[data-function="note-color"] .nav-select-list-item.selected'
-  ).attr("value");
-  const noteFont = $(
-    '.nav-select[data-function="note-font"] .nav-select-list-item.selected'
-  ).attr("value");
+  const noteBackground = $('.nav-slider[data-function="note-background"] .nav-slider-track-item.selected').children('img').attr('src');
+  const notePaper = $('.nav-slider[data-function="note-paper"] .nav-slider-track-item.selected').data("pattern");
+  const noteColor = $('.nav-select[data-function="note-color"] .nav-select-list-item.selected').attr("value");
+  const noteFont = $('.nav-select[data-function="note-font"] .nav-select-list-item.selected').attr("value");
   const hashtags = $('.hashtags-list-item').text().split('#');
+  //handling the hashtag array
   hashtags.shift()
   //
-  const userId = window.globals.user.id;
-  //
+  const userId = globals.user.id;
+  // * the note data template
   const noteData = {
     noteConfigs: {
       noteColor: noteColor,
@@ -121,13 +118,18 @@ $(document).on("click", "#note-save", async function () {
     noteLocation: noteLocation,
   };
   console.log(noteData)
-  if (userId) {
-    console.log(`%cUser is logged in`, 'color:blue; background-color: white')
-    noteData.user = userId;
-    const id = $('.note').data('id');
-    if(id) {
-      //the note exists so we need to update it
+  //
+  const id = $('.note').data('id');
+  const loggedInOrNot = globals.verified;
+  //
+  noteData.user = userId;
+  if(id){
     console.log(`%cThe note EXISTS`, 'color:blue; background-color: white')
+    noteData.id = id;
+    //the note exists
+    //we'll need to check if the user is looged in
+    if(loggedInOrNot){
+      console.log(`%cUser is logged in`, 'color:blue; background-color: white')
       try{
         const docRef = doc(db, "notes", id);
         updateDoc(docRef, noteData);
@@ -135,74 +137,36 @@ $(document).on("click", "#note-save", async function () {
         console.error(error)
       }
     } else {
-    console.log(`%cThe note DOESEN'T exist`, 'color:blue; background-color: white')
-      //the note doesent exist
-    //creating a docRef
-    const docRef = doc(db, "notes");
-    //setting this new dc in the firebase
-    await setDoc(docRef, noteData);
-    //getting that new id
-    noteData.id  = docRef.id;
-    //and setting the id to the note itself
-    $('.note').data('id', docId)
-    history.pushState(null, null, docRef.id);
-    //
-    window.globals.user.info.folders.every(({name, noteIds})=>{
-      if(name.toLowerCase().trim() == noteLocation){
-        noteIds.push(noteData.id);
-        return false;
-      }
-      return true;
-    })
+      console.log(`%cUser is NOT logged in`, 'color:blue; background-color: white')
+      // * user is not logged in and they're trying to update a localStorage note
+      globals.user.info.folders[noteLocation].noteIds[id] = noteData;
+      globals.notes[id] = noteData;
     }
   } else {
-    console.log(`%cUser is NOT logged in`, 'color:blue; background-color: white')
-    noteData.user = "local";
-    const id = $('.note').data('id');
-    if(id) {
-    console.log(`%cThe note EXISTS`, 'color:blue; background-color: white')
-      //the note exists so we need to update it
-      window.globals.user.info.folders.every( ({name, noteIds}) => {
-        //we need to find in which folder the note belongs in
-        if(name.toLowerCase().trim() == noteLocation.toLowerCase()){
-        console.log(`%cLooping throught the folders`, 'color:green; background-color: black')
-         noteIds.every( (noteId, i) => {
-          if(noteId == id){
-          console.log(`%cFound the ID assocciated with the note, updating the value`, 'color:green; background-color: black')
-            noteIds[i] = noteData;
-            return false;
-          }
-          return true;
-         })
-          return false;
-        }
-        return true;
-      })
-    } else {
-    console.log(`%c The note DOESEN'T exist`, 'color:blue; background-color: white')
-      //the note doesent exist
-    console.log(`%cGenerating an Id`, 'color:green; background-color: black')
-   const newNoteId = randomHexGenerator()
-    $('.note').data('id', newNoteId)
-    noteData.id = newNoteId;
-    history.pushState(null, null, newNoteId);
-    //
-    window.globals.user.info.folders.every(({name, noteIds})=>{
-      if(name.toLowerCase().trim() == noteLocation.toLowerCase()){
-        console.log(`%cFound where the note belogs-${name}`, 'color:green; background-color: black')
-        noteIds.push(noteData.id);
-        return false;
-      }
-      return true;
-      })
-    window.globals.notes[newNoteId] = noteData;
-
+    console.log(`%cThe note does NOT exist`, 'color:blue; background-color: white')
+    //the note doesen't exist
+     //we'll need to check if the user is looged in
+     if(loggedInOrNot){
+      console.log(`%cUser is logged in`, 'color:blue; background-color: white');
+      // * user is logged in and they're trying to create a note in the firebase
+      const docRef = await addDoc(collection(db, "notes"), noteData);
+      noteData.id = docRef.id;
+     } else {
+        console.log(`%cUser is NOT logged in`, 'color:blue; background-color: white');
+        // * user is not logged in and theyre trying to create a doc in the localstorage
+        noteData.id = randomHexGenerator();
     }
+    $('.note').data('id', noteData.id);
+    console.log(noteLocation.trim())
+    globals.user.info.folders[noteLocation].noteIds[noteData.id] = noteData;
+    history.pushState(null, null, noteData.id);
+    // * and also updating the notes object in the globals
   }
-  //
- 
-  // window.globals.notes[noteData.id] = noteData;
-  //we also need to add this note id to the array of the notes 
+  console.log( globals.user.info.folders[noteLocation].noteIds)
+  globals.notes[noteData.id] = noteData;
+  // ! Don't forget to update the window.globals
+  // * This will make sure to update the localStorage 
+  window.globals = globals;
 });
 //the hashtag functionality, adding the hashtags into the hashtag bar
 const hashtagsReturner = (hashtag) =>
@@ -215,7 +179,11 @@ const addNewHashtag = () => {
   if (value) {
     valueTarget.val("");
     target.append(hashtagsReturner(value));
+    // ! Don't forget to update the window.globals
+    // * This will make sure to update the localStorage 
+    window.globals = globals;
   }
+
 };
 //the click handler
 $(document).on("click", "#add-hashtag", addNewHashtag);
@@ -225,4 +193,7 @@ $(document).on("keypress", "#hashtag-input", (e) => {
     addNewHashtag();
   }
 });
-
+// ! Don't forget to update the window.globals
+// * This will make sure to update the localStorage 
+// TODO this needs to be at the end of all on click events
+window.globals = globals;

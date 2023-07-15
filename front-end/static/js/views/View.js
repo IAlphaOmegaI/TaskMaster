@@ -50,6 +50,7 @@ const dynamicViewInteraface = {
         history.pushState(null, null, 'new-note');
         appContents = appFunc('', {
           noteBackground: 'pattern-1',
+          notePaper: 'pattern-1',
           noteColor: 'black',
           noteFont: 'ballpoint'
         }, [], 'new-note');
@@ -71,6 +72,7 @@ const dynamicViewInteraface = {
         //note doesen't exist
         history.pushState(null, null, 'new-note');
         appContents = appFunc('', {
+          notePaper: 'pattern-1',
           noteBackground: 'pattern-1',
           noteColor: 'black',
           noteFont: 'ballpoint'
@@ -135,10 +137,13 @@ const dynamicViewInteraface = {
     const hashtagsSet = new Set();
     const notesArray =  [];
     //
-      for ( let folder of userInfo.folders) {
+      for ( let folderId of Object.keys(userInfo.folders)) {
+        const folder = userInfo.folders[folderId];
         const folderLocation = folder.name;
         const folderNoteIdsArray = folder.noteIds;
-        for ( let id of folderNoteIdsArray) {
+        for ( let folderId of Object.keys(folderNoteIdsArray)) {
+          const noteData = folderNoteIdsArray[folderId];
+          const {id} = noteData;
           //we go and request the id in the firebase
           if(loggedInOrNot){
               const docRef = doc(db, "notes", id);

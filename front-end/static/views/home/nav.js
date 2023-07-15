@@ -12,7 +12,11 @@ const defaultNavReturner = ({name, profilePicture, folders}, loggedInOrNot) => /
                 <span class="nav-container-subtitle">What's next?</span>
             </div>
             <div class="nav-items">
-            ${folders.map(({name, className, hashtagsArr}, i) => navItemReturner(name, className, hashtagsArr, i)).join('')}
+            ${Object.keys(folders).map((key, i) => {
+                const {name, className, hashtagsArr} = folders[key];
+                return navItemReturner(name, className, hashtagsArr, i)
+             }).join('')
+            }
                 <h1 class="nav-items-item disabled"><i class="fi fi-rr-add-folder nav-items-item-icon"></i>Add a Folder</h1>
             </div>
             <div class="nav-upgrade">

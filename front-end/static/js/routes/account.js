@@ -34,6 +34,8 @@ import {
   provider,
   defaults,
 } from "/static/js/consts.js";
+// ! the globals
+const globals = window.globals;
 //the current user
 const currentUser = getAuth(window.app).currentUser;
 //the account state change handler for when the user logs in or out
@@ -45,7 +47,7 @@ const accountStatusChangeHandler = (source) => {
   //
   nameRef.text(source.name);
   profilePictureRef.attr("src", source.profilePicture);
-  //changing the icon
+  //changing the icon and updating the text
   settingsRef
     .children("i")
     .removeClass("fi-rr-enter")
@@ -70,8 +72,8 @@ $(document).on('click', '#nav-user[data-status="logged-in"]', function(){
   settingsRef.children("span").text("Log In");
   settingsRef.attr('data-link', '');
   //also updating the globals
-  window.globals.user = defaults.templateUserData,
-  window.globals.verified = false;
+  globals.user = defaults.templateUserData,
+  globals.verified = false;
 
 })
 //we trigger the function if we already had a save of the users data in the local storage
@@ -81,10 +83,11 @@ onAuthStateChanged(auth, async (user) => {
     const docRef = doc(db, "users", user.uid);
     try {
       const userData = await getDoc(docRef);
+      // * handling the nav updates
       accountStatusChangeHandler(userData.data());
-      //also setting up the window.globals variables
-      window.globals.verified = true;
-      window.globals.user = {
+      // * also updating the globals 
+      globals.verified = true;
+      globals.user = {
         metaData: user.user,
         info: userData.data(),
       };
@@ -143,7 +146,7 @@ const errorFormmaterReturner = (error) => {
 };
 //the main error handler function
 const errorHandler = (error) => {
-  console.log(error);
+  console.error(error);
   dialog
     .find("#dialog-title")
     .text(errorInterface[errorFormmaterReturner(error)].title);
@@ -255,50 +258,47 @@ $(document).on("click", ".content-column-button", async function () {
           userData.password
         );
         //updating the global variables
-        window.globals.verified = true;
-        window.globals.user = {
+        globals.verified = true;
+        globals.user = {
           metaData: userCredential.user,
           info: {
             uid: userCredential.user.uid,
             name: userData.name,
             email: userData.email,
             profilePicture: hostedImageURL,
-            folders: [
-              {
+            folders: {
+              'Notes': {
                 name: 'Notes',
                 className: 'edit',
                 hashtagsArr: [],
-                noteIds: [],
+                noteIds: {},
               },
-              {
+              'ToDo-s': {
                 name: 'ToDo-s',
                 className: 'assept-document',
                 hashtagsArr: [],
-                noteIds: [],
+                noteIds: {},
               },
-              {
+              'Music': {
                 name: 'Music',
                 className: 'music',
                 hashtagsArr: [],
-                noteIds: [],
+                noteIds: {},
               },
-              {
+              'Movies': {
                 name: 'Movies',
                 className: 'camera-movie',
                 hashtagsArr: [],
-                noteIds: [],
+                noteIds: {},
               },
-            ]
+            }
           },
         };
         //creating the new document with template data
-        await setDoc(
-          doc(db, "users", userCredential.user.uid),
-          window.globals.user.info
-        );
+        await setDoc( doc(db, "users", userCredential.user.uid), globals.user.info);
         // auth.stateChange will handle the updates
         console.log(
-          `%cCreated a new account and logged in as ${window.GLOBALS.user.info.name}`,
+          `%cCreated a new account and logged in as ${globals.user.info.name}`,
           `background-color: black; color: red;`
         );
       } catch (error) {
@@ -319,8 +319,8 @@ $(document).on("click", ".content-column-button", async function () {
         const docRef = doc(db, "users", userCredential.user.uid);
         const docSnap = await getDoc(docRef);
         //updating the global variables
-        window.globals.verified = true;
-        window.globals.user = {
+        globals.verified = true;
+        globals.user = {
           metaData: userCredential.user,
           info: docSnap.data(),
         };
@@ -328,7 +328,7 @@ $(document).on("click", ".content-column-button", async function () {
         //auth.stateChange will handle the updates
         //
         console.log(
-          `%cLogged in as ${window.globals.user.info.name}`,
+          `%cLogged in as ${globals.user.info.name}`,
           `background-color: black; color: cyan; width:100%; height:100%;`
         );
       } catch (error) {
@@ -342,55 +342,63 @@ $(document).on("click", ".content-column-button", async function () {
 async function signInWithGoogle() {
   try {
     const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+    let user = result.user;
     //updating the global variables
-    window.globals.verified = true;
-    window.globals.user = {
-      metaData: user,
-      info: {
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        profilePicture: user.photoURL,
-        folders: [
-          {
-            name: 'Notes',
-            className: 'edit',
-            hashtagsArr: [],
-            noteIds: [],
-          },
-          {
-            name: 'ToDo-s',
-            className: 'assept-document',
-            hashtagsArr: [],
-            noteIds: [],
-          },
-          {
-            name: 'Music',
-            className: 'music',
-            hashtagsArr: [],
-            noteIds: [],
-          },
-          {
-            name: 'Movies',
-            className: 'camera-movie',
-            hashtagsArr: [],
-            noteIds: [],
-          },
-        ]
-      },
-    };
-    console.log(user.photoURL);
-    // Save the profile picture URL in Firestore
+    // ! We need to deal with the part if the user is logging in or rather creating an account 
+    globals.verified = true;
     const userDocRef = doc(db, "users", user.uid);
-    await setDoc(userDocRef, window.globals.user.info, { merge: true });
+    const userData = getDoc(userDocRef);
 
-    console.log("Signed in as:", user.displayName);
+    if(userData.exists()){
+      globals.user = {
+        metaData: user,
+        info: userData.data(),
+      }
+      console.log("Signed in as:", user.displayName);
+    } else {
+      //the user is signing in
+      globals.user = {
+        metaData: user,
+        info: {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          profilePicture: user.photoURL,
+          folders: {
+            'Notes': {
+              name: 'Notes',
+              className: 'edit',
+              hashtagsArr: [],
+              noteIds: {},
+            },
+            'ToDo-s': {
+              name: 'ToDo-s',
+              className: 'assept-document',
+              hashtagsArr: [],
+              noteIds: {},
+            },
+            'Music': {
+              name: 'Music',
+              className: 'music',
+              hashtagsArr: [],
+              noteIds: {},
+            },
+            'Movies': {
+              name: 'Movies',
+              className: 'camera-movie',
+              hashtagsArr: [],
+              noteIds: {},
+            },
+          }
+        },
+      };
+      await setDoc(userDocRef, globals.user.info, { merge: true });
+      console.log("Created an account and signed in as:", user.displayName);
+    }
   } catch (error) {
     console.error("Error signing in with Google:", error);
   }
 }
-
 $(document).on(
   "click",
   ".content-column-container-header-button",
@@ -404,3 +412,6 @@ $(document).on("click", ".content-column-container-instead", function () {
   primTarget.toggleClass("active");
   secTarget.toggleClass("active");
 });
+// ! Don't forget to update the window.globals
+// * This will make sure to update the localStorage 
+window.globals = globals;
