@@ -6,6 +6,106 @@
   width: 100%;
   height: 100%;
 }
+#app.home #app-contents .notes {
+  width: 100%;
+  height: 92% !important;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+#app.home #app-contents .notes-sizer {
+  width: 33.33%;
+}
+#app.home #app-contents .notes .note {
+  width: calc(33.33% - 10px);
+  margin: 0 0 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+#app.home #app-contents .notes .note-background {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+}
+#app.home #app-contents .notes .note-gradient {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 5px);
+  height: calc(100% + 5px);
+  border-radius: 10px;
+}
+#app.home #app-contents .notes .note-title {
+  padding: 5px 15px;
+  background-color: var(--primary-background-color);
+  border-radius: 5px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: var(--secondary-font-size);
+  font-family: var(--ternary-font);
+  color: var(--secondary-color);
+  max-width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  z-index: 10;
+}
+#app.home #app-contents .notes .note-go {
+  position: absolute;
+  background-color: var(--primary-background-color);
+  height: var(--primary-font-size);
+  width: var(--primary-font-size);
+  border-radius: 50%;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#app.home #app-contents .notes .note-go-icon {
+  font-size: var(--text-font-size);
+  color: var(--secondary-color);
+}
+#app.home #app-contents .hashtags {
+  width: 100%;
+  height: calc(8% - 10px);
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: var(--secondary-background-color);
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+}
+#app.home #app-contents .hashtags .hashtag {
+  height: calc(100% - 10px);
+  margin: 10px 0;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+#app.home #app-contents .hashtags .hashtag-value {
+  color: var(--secondary-color);
+  font-size: var(--text-font-size);
+  font-family: var(--primary-font);
+  text-transform: capitalize;
+}
+#app.home #app-contents .hashtags .hashtag-line {
+  position: absolute;
+  left: 0;
+  bottom: 10%;
+  height: 2px;
+  width: 0%;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  transition: width 0.1s ease;
+}
+#app.home #app-contents .hashtags .hashtag.active .hashtag-line {
+  width: 100%;
+}
 #app.home #app-contents .add {
   position: absolute;
   bottom: 0px;

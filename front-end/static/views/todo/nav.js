@@ -1,3 +1,13 @@
+const navItemRetunrner = (index, name ) => /*html*/`
+    <div class="nav-slider-track-item ${ index === 0 ? 'selected' : '' }">
+        <img class="nav-slider-track-item-image" src="/static/assets/images/note/note-image-${index}.jpg" />
+        <span class="nav-slider-track-item-title">${name}</span>
+    </div>
+`
+const pagnationItemReturner = i => /*html*/`
+    <div class="nav-slider-controls-pagnation-item ${i === 0 ? 'selected' : ''}"></div>
+`
+const backgroundImagesArr = ['Ice Peaks', 'Quiet Nature', 'Fox in Fall', 'Red Velvet', 'Flowers', 'Cyan Abstract', 'Orange Abstract', 'Explosion']; 
 const editNavReturner = (noteName, {noteFont, noteColor, noteBackground, notePaper}) => (/*html*/ `    
     <div class="nav edit-nav" data-animation="animate-in-left-to-right">
         <div class="nav-container nav-edit">
@@ -7,22 +17,7 @@ const editNavReturner = (noteName, {noteFont, noteColor, noteBackground, notePap
         </div>
         <div class="nav-slider" data-function="note-background">
             <div class="nav-slider-track vertical" data-role="note-background">
-                <div class="nav-slider-track-item selected">
-                    <img class="nav-slider-track-item-image" src="/static/assets/images/note-image-1.jpg" />
-                    <span class="nav-slider-track-item-title">Quiet Nature</span>
-                </div>
-                <div class="nav-slider-track-item">
-                    <img class="nav-slider-track-item-image" src="/static/assets/images/note-image-1.jpg" />
-                    <span class="nav-slider-track-item-title">Quiet Nature</span>
-                </div>
-                <div class="nav-slider-track-item">
-                    <img class="nav-slider-track-item-image" src="/static/assets/images/note-image-1.jpg" />
-                    <span class="nav-slider-track-item-title">Quiet Nature</span>
-                </div>
-                <div class="nav-slider-track-item">
-                    <img class="nav-slider-track-item-image" src="/static/assets/images/note-image-1.jpg" />
-                    <span class="nav-slider-track-item-title">Quiet Nature</span>
-                </div>
+                ${backgroundImagesArr.map((name, i) => navItemRetunrner(i , name)).join('')}
                 <div class="nav-slider-track-item field">
                     <input type="file" accept="image/*" name="nav-slider-track-item-input" id="nav-slider-track-item-input"
                         class="nav-slider-track-item-input image-input" style="display: none;" />
@@ -33,11 +28,7 @@ const editNavReturner = (noteName, {noteFont, noteColor, noteBackground, notePap
             <div class="nav-slider-controls vertical">
                 <i class="nav-slider-controls-control fa-solid fa-chevron-down" data-target="vertical" data-direction="-"></i>
                 <div class="nav-slider-controls-pagnation">
-                    <div class="nav-slider-controls-pagnation-item selected"></div>
-                    <div class="nav-slider-controls-pagnation-item"></div>
-                    <div class="nav-slider-controls-pagnation-item"></div>
-                    <div class="nav-slider-controls-pagnation-item"></div>
-                    <div class="nav-slider-controls-pagnation-item"></div>
+                    ${backgroundImagesArr.map((name, i) => pagnationItemReturner(i)).join('')}
                 </div>
                 <i class="nav-slider-controls-control fa-solid fa-chevron-down" data-direction="+" data-target="vertical"></i>
             </div>

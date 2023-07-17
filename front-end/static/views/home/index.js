@@ -1,26 +1,91 @@
-const noteThumbnailReturner = ( { noteBackground }, noteName, noteId, noteLocation) => /*html*/`
-<div class="note" data-id="${noteId}" data-link href="/todo/${noteId}" data-for="${noteLocation}">
-  <span class="note-title">${noteName}</span>
-  <img class="note-background" src="${noteBackground}"/>
-  <div class="note-go">
-    <i class="fa-solid fa-arrow-right note-go-icon"></i>
-  </div>
-</div>
-`
-const hashtagsReturner = (hashtag, location) => `<span class="hashtag" data-for="${location}">#${hashtag}</span>`;
+const noteThumbnailReturner = async ({ noteBackground }, noteName, noteId, noteLocation, noteHashtags) => {
+  var mostUsedColor;
+  const img = $(`<img class="note-background" src="${noteBackground}"/>`);
+  await new Promise ((resolve, reject) => {
+    img[0].onload = () => {
+      console.log( img[0].naturalWidth)
+      const canvas = $(`<canvas width="${200}" height="${200}">`);
+      const ctx = canvas[0].getContext('2d');
+      ctx.drawImage(img[0], 0, 0);
+      const imageData = ctx.getImageData(0, 0, 200, 200);
+      const data = imageData.data;
+      // Create an object to keep track of the color values
+      const colors = {};
+      // Loop through the pixel data
+      for (let i = 0; i < data.length; i += 4) {
+        // Get the RGB values of the current pixel
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        // Convert the RGB values to a hex string
+        const hex = rgbToHex(r, g, b);
+        // If the color has not been seen before, add it to the colors object with a count of 1
+        if (!colors[hex]) {
+          colors[hex] = 1;
+        } else {
+          // Otherwise, increment the count of the color
+          colors[hex]++;
+        }
+      }
+      // Find the color with the highest count
+      let maxCount = 0;
+      for (const [color, count] of Object.entries(colors)) {
+        if (count > maxCount) {
+          mostUsedColor = color;
+          maxCount = count;
+        }
+      }
+      
+      resolve();
+    };
+    img.onerror = error => reject(error);
+  })
+  // Log the most used color
+  console.log(mostUsedColor);
+  return /*html*/ `
+    <div class="note" data-id="${noteId}" data-link href="/todo/${noteId}" data-for="${noteLocation}" data-hashtags="${noteHashtags.join(',')}">
+      <span class="note-title">${noteName}</span>
+      ${img.prop('outerHTML')}
+      <div class="note-gradient" style="background: linear-gradient(90deg, rgba(0,0,0,0.5) 40%, ${mostUsedColor} 95%);"></div>
+      <div class="note-go">
+        <i class="fa-solid fa-arrow-right note-go-icon"></i>
+      </div>
+    </div>
+  `;
+};
 
-const homeReturner = (notesArray, hashtagsArray) => /*html*/`
-<div id="app-contents" data-animation="animate-in-bottom-to-top">
-    <div class="hashtags">
-      ${hashtagsArray.map(({hashtagLocation, hashtag}) => hashtagsReturner(hashtag, hashtagLocation))}
-    </div>
-    <div class="notes">
-        ${notesArray.map(({noteConfigs, noteValue, noteName, id, noteLocation}) => noteThumbnailReturner(noteConfigs, noteName, id, noteLocation))}
-    </div>
-    <div class="add" data-link href="/todo/new-note">
+// Helper function to convert RGB values to a hex string
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+
+const hashtagsReturner = (hashtag, location) => /*html*/`
+  <div class="hashtag">
+    <span class="hashtag-value" data-for="${location}">${hashtag}</span>
+    <div class="hashtag-line"></div>
+  </div>
+`;
+
+const homeReturner = async (notesArray, hashtagsArray) => {
+  let notesHtml = '';
+  for (const { noteConfigs, noteValue, noteName, id, noteLocation, hashtagsArray } of notesArray) {
+    const noteHtml = await noteThumbnailReturner(noteConfigs, noteName, id, noteLocation, hashtagsArray);
+    notesHtml += noteHtml;
+  }
+  return /*html*/ `
+    <div id="app-contents" data-animation="animate-in-bottom-to-top">
+      <div class="hashtags">
+        ${hashtagsArray.map(({ hashtagLocation, value }) => hashtagsReturner(value, hashtagLocation)).join('')}
+      </div>
+      <div class="notes">
+        <div class="notes-sizer"></div>
+        ${notesHtml}
+      </div>
+      <div class="add" data-link href="/todo/new-note">
         <i class="fi fi-sr-add-document add-icon"></i>
         <h1 class="add-title">Add something to <span class="add-title-folder" id="add-note">Notes</span></h1>
+      </div>
     </div>
-</div>
-`
+  `;
+};
 export default homeReturner;

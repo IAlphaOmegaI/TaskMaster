@@ -25,8 +25,8 @@ const defaultNavReturner = ({name, profilePicture, folders}, loggedInOrNot) => /
                     <h1 class="nav-upgrade-button-title">Upgrade to Premium</h1>
                 </div>
             </div>
-            <div class="nav-settings" data-status="${loggedInOrNot ? 'logged-in' : 'logged-out'}">
-                <h1 class="nav-settings-item" id="nav-user" href="/account" data-link>
+            <div class="nav-settings">
+                <h1 class="nav-settings-item" id="nav-user" href="/account" data-link  data-status="${loggedInOrNot ? 'logged-in' : 'logged-out'}">
                     <i class="fi fi-rr-${loggedInOrNot ? 'exit' : 'enter'} nav-settings-item-icon" id="nav-user-icon"></i>
                     <span class=" nav-settings-item-title">${loggedInOrNot ? 'Log Out' : 'Log In'}</span>
                 </h1>

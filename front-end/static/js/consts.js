@@ -10,48 +10,35 @@ const randomHexGenerator = () =>
     .padStart(6, "0");
 //
 const defaults = {
-      defaultProfilePicture: '/static/assets/images/overall/default-profile-picture.jpg',
-      templateUserData: {
-        metaData: null,
+ defaultProfilePicture: '/static/assets/images/overall/default-profile-picture.jpg',
+ templateUserData: (metaData = null, uid= randomHexGenerator(), name = 'user', email = 'local.user@task-master.com', profilePictureParam = '/static/assets/images/overall/default-profile-picture.jpg', folders = [['Notes', "edit", [], []], ['ToDo-s', "assept-document", [], []], ['Music', "music", [], []], ['Movies', "camer-movie", [], []]] ) => 
+      { 
+      const userData =  {
+        metaData: metaData,
         info: {
-          uid: randomHexGenerator(),
-          name: 'User',
-          email: 'local.user@task-master.com',
-          profilePicture: '/static/assets/images/overall/default-profile-picture.jpg',
-          folders: {
-            'Notes': {
-              name: 'Notes',
-              className: 'edit',
-              hashtagsArr: [],
-              noteIds: {},
-            },
-            'ToDo-s': {
-              name: 'ToDo-s',
-              className: 'assept-document',
-              hashtagsArr: [],
-              noteIds: {},
-            },
-            'Music': {
-              name: 'Music',
-              className: 'music',
-              hashtagsArr: [],
-              noteIds: {},
-            },
-            'Movies': {
-              name: 'Movies',
-              className: 'camera-movie',
-              hashtagsArr: [],
-              noteIds: {},
-            },
-          }
+          uid: uid,
+          name: name,
+          email: email,
+          profilePicture: profilePictureParam,
+          folders:{}
         },
-      },
+     };
+     folders.forEach(([name, className, noteIds, hashtagsArr]) => {
+      userData.info.folders[name] = {
+        name: name,
+        className: className,
+        noteIds: noteIds,
+        hashtagsArr: hashtagsArr,
+      }
+     })
+     return userData;
+  }
 }
 //
 if(!localStorage.globals){
     localStorage.globals = JSON.stringify({
         verified: false,
-        user: defaults.templateUserData,  
+        user: defaults.templateUserData(),  
         notes: {},
         noteLocation: 'Notes',
     })

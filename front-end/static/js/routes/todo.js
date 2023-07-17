@@ -2,6 +2,15 @@
 //handles everything that has to do with note creation/ viewing, creates the id of the note in te db/ localstorage and also different effects
 //
 //outside exports
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  addDoc, 
+  updateDoc,
+  collection,
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import { randomHexGenerator } from "/static/js/consts.js";
 // * the globals
 const globals = window.globals;
@@ -103,7 +112,7 @@ $(document).on("click", "#note-save", async function () {
   //handling the hashtag array
   hashtags.shift()
   //
-  const userId = globals.user.id;
+  const userId = globals.user.info.uid;
   // * the note data template
   const noteData = {
     noteConfigs: {
@@ -139,7 +148,6 @@ $(document).on("click", "#note-save", async function () {
     } else {
       console.log(`%cUser is NOT logged in`, 'color:blue; background-color: white')
       // * user is not logged in and they're trying to update a localStorage note
-      globals.user.info.folders[noteLocation].noteIds[id] = noteData;
       globals.notes[id] = noteData;
     }
   } else {
@@ -149,7 +157,9 @@ $(document).on("click", "#note-save", async function () {
      if(loggedInOrNot){
       console.log(`%cUser is logged in`, 'color:blue; background-color: white');
       // * user is logged in and they're trying to create a note in the firebase
-      const docRef = await addDoc(collection(db, "notes"), noteData);
+      console.warn(noteData)
+      const userRef = collection(db, 'notes')
+      const docRef = await addDoc( userRef, noteData)
       noteData.id = docRef.id;
      } else {
         console.log(`%cUser is NOT logged in`, 'color:blue; background-color: white');
@@ -157,10 +167,8 @@ $(document).on("click", "#note-save", async function () {
         noteData.id = randomHexGenerator();
     }
     $('.note').data('id', noteData.id);
-    console.log(noteLocation.trim())
-    globals.user.info.folders[noteLocation].noteIds[noteData.id] = noteData;
+    globals.user.info.folders[noteLocation].noteIds.push(noteData.id);
     history.pushState(null, null, noteData.id);
-    // * and also updating the notes object in the globals
   }
   console.log( globals.user.info.folders[noteLocation].noteIds)
   globals.notes[noteData.id] = noteData;

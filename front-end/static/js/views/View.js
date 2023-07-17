@@ -140,10 +140,7 @@ const dynamicViewInteraface = {
       for ( let folderId of Object.keys(userInfo.folders)) {
         const folder = userInfo.folders[folderId];
         const folderLocation = folder.name;
-        const folderNoteIdsArray = folder.noteIds;
-        for ( let folderId of Object.keys(folderNoteIdsArray)) {
-          const noteData = folderNoteIdsArray[folderId];
-          const {id} = noteData;
+        for ( let id of folder.noteIds ) {
           //we go and request the id in the firebase
           if(loggedInOrNot){
               const docRef = doc(db, "notes", id);
@@ -162,7 +159,8 @@ const dynamicViewInteraface = {
             } else {
               //user is not linked to the database
               notesArray.push(window.globals.notes[id]);
-              const {hashtagsArray } = window.globals.notes[id];
+              console.log(window.globals.notes[id])
+              const {hashtagsArray} = window.globals.notes[id];
               hashtagsArray.forEach( hashtag => hashtagsSet.add({
                 hashtagLocation: folderLocation,
                 value: hashtag.toLowerCase(),
@@ -171,9 +169,8 @@ const dynamicViewInteraface = {
 
           } 
       }
-  
     return{
-      appContents : appFunc(notesArray, Array.from(hashtagsSet)),
+      appContents : await appFunc(notesArray, Array.from(hashtagsSet)),
       //and also dealing with the navbar
       navContents: navFunc(userInfo, window.globals.verified),
     }

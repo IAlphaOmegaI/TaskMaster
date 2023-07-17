@@ -12,19 +12,25 @@ const routes = {
   "/": {
     route: "Home",
     path: "/",
-    navbar: true,
+    callback: () => {
+      console.log('ji')
+      $('.notes').masonry({
+        itemSelector: '.note',
+        columnWidth: '.notes-sizer',
+        percentPosition: true,
+        gutter: 5,
+      });
+    }
   },
 
   "/todo/:id": {
     route: "Todo",
     path: "/todo/:id",
-    navbar: true,
   },
 
-  account: {
+  '/account': {
     route: "Account",
     path: "/account",
-    navbar: false,
   },
 };
 
@@ -78,7 +84,7 @@ const router = async () => {
   const view = new View(match.route, getParams(match));
   const {appContents, navContents} = await view.getHtml(match.route.toLowerCase());
   //
-  console.warn(navContents)
+  // console.warn(appContents)
   //the transition handler
   if (historyArr.length > 1) {
     //=> the navbar transition
@@ -98,6 +104,9 @@ const router = async () => {
         .html(navContents);
       //
       $("body").attr("class", "").addClass(match.route.toLowerCase());
+      //and a few extra attributes
+      if(match.callback)
+        match.callback()
     }, 500 );
 };
 

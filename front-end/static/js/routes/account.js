@@ -38,24 +38,6 @@ import {
 const globals = window.globals;
 //the current user
 const currentUser = getAuth(window.app).currentUser;
-//the account state change handler for when the user logs in or out
-const accountStatusChangeHandler = (source) => {
-  //changing the profile picture, folders and profile-picture of the nav bar
-  const settingsRef = $("#nav-user");
-  const nameRef = $("#nav-username");
-  const profilePictureRef = $("#nav-profile-picture");
-  //
-  nameRef.text(source.name);
-  profilePictureRef.attr("src", source.profilePicture);
-  //changing the icon and updating the text
-  settingsRef
-    .children("i")
-    .removeClass("fi-rr-enter")
-    .addClass("fi fi-rr-exit");
-  settingsRef.removeAttr('data-link');
-  settingsRef.data('status', 'logged-in');
-  settingsRef.children("span").text("Log Out");
-};
 $(document).on('click', '#nav-user[data-status="logged-in"]', function(){
   const settingsRef = $(this);
   const nameRef = $("#nav-username");
@@ -72,7 +54,7 @@ $(document).on('click', '#nav-user[data-status="logged-in"]', function(){
   settingsRef.children("span").text("Log In");
   settingsRef.attr('data-link', '');
   //also updating the globals
-  globals.user = defaults.templateUserData,
+  globals.user = defaults.templateUserData(),
   globals.verified = false;
 
 })
@@ -83,8 +65,9 @@ onAuthStateChanged(auth, async (user) => {
     const docRef = doc(db, "users", user.uid);
     try {
       const userData = await getDoc(docRef);
+      console.log(userData.data())
       // * handling the nav updates
-      accountStatusChangeHandler(userData.data());
+      // accountStatusChangeHandler(userData.data());
       // * also updating the globals 
       globals.verified = true;
       globals.user = {
@@ -95,6 +78,9 @@ onAuthStateChanged(auth, async (user) => {
       console.error(error);
     }
   }
+  // ! Don't forget to update the window.globals
+  // * This will make sure to update the localStorage 
+  window.globals = globals;
 });
 //the modal and backdrop elements
 const dialog = $(".modal"),
@@ -259,41 +245,7 @@ $(document).on("click", ".content-column-button", async function () {
         );
         //updating the global variables
         globals.verified = true;
-        globals.user = {
-          metaData: userCredential.user,
-          info: {
-            uid: userCredential.user.uid,
-            name: userData.name,
-            email: userData.email,
-            profilePicture: hostedImageURL,
-            folders: {
-              'Notes': {
-                name: 'Notes',
-                className: 'edit',
-                hashtagsArr: [],
-                noteIds: {},
-              },
-              'ToDo-s': {
-                name: 'ToDo-s',
-                className: 'assept-document',
-                hashtagsArr: [],
-                noteIds: {},
-              },
-              'Music': {
-                name: 'Music',
-                className: 'music',
-                hashtagsArr: [],
-                noteIds: {},
-              },
-              'Movies': {
-                name: 'Movies',
-                className: 'camera-movie',
-                hashtagsArr: [],
-                noteIds: {},
-              },
-            }
-          },
-        };
+        globals.user = defaults.templateUserData(userCredential.user, userCredential.user.uid, userData.name, userData.email, hostedImageURL)
         //creating the new document with template data
         await setDoc( doc(db, "users", userCredential.user.uid), globals.user.info);
         // auth.stateChange will handle the updates
@@ -337,6 +289,7 @@ $(document).on("click", ".content-column-button", async function () {
       }
     }
   }
+  
 });
 //also handling sign in with google
 async function signInWithGoogle() {
@@ -349,7 +302,7 @@ async function signInWithGoogle() {
     const userDocRef = doc(db, "users", user.uid);
     const userData = getDoc(userDocRef);
 
-    if(userData.exists()){
+    if(userData.exists){
       globals.user = {
         metaData: user,
         info: userData.data(),
@@ -357,41 +310,7 @@ async function signInWithGoogle() {
       console.log("Signed in as:", user.displayName);
     } else {
       //the user is signing in
-      globals.user = {
-        metaData: user,
-        info: {
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-          profilePicture: user.photoURL,
-          folders: {
-            'Notes': {
-              name: 'Notes',
-              className: 'edit',
-              hashtagsArr: [],
-              noteIds: {},
-            },
-            'ToDo-s': {
-              name: 'ToDo-s',
-              className: 'assept-document',
-              hashtagsArr: [],
-              noteIds: {},
-            },
-            'Music': {
-              name: 'Music',
-              className: 'music',
-              hashtagsArr: [],
-              noteIds: {},
-            },
-            'Movies': {
-              name: 'Movies',
-              className: 'camera-movie',
-              hashtagsArr: [],
-              noteIds: {},
-            },
-          }
-        },
-      };
+      globals.user = defaults.templateUserData(user, user.uid, user.displayName, user.email, user.photoURL)
       await setDoc(userDocRef, globals.user.info, { merge: true });
       console.log("Created an account and signed in as:", user.displayName);
     }
@@ -405,13 +324,13 @@ $(document).on(
   signInWithGoogle
 );
 //and also handling animations and transitons between log in and sign up columns
-$(document).on("click", ".content-column-container-instead", function () {
-  const s = $(this);
-  const primTarget = s.parent().parent();
-  const secTarget = primTarget.siblings(".content-column");
-  primTarget.toggleClass("active");
-  secTarget.toggleClass("active");
-});
+// $(document).on("click", ".content-column-container-instead", function () {
+//   const s = $(this);
+//   const primTarget = s.parent().parent();
+//   const secTarget = primTarget.siblings(".content-column");
+//   primTarget.toggleClass("active");
+//   secTarget.toggleClass("active");
+// });
 // ! Don't forget to update the window.globals
 // * This will make sure to update the localStorage 
 window.globals = globals;
