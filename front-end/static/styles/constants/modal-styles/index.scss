@@ -1,17 +1,21 @@
+body.home{
+    .modal{
+        display: none;
+    }
+}
 .modal{
-    width: 35%;
-    height: 30%;
+    height: 25%;
+    aspect-ratio: 2/1;
     overflow: hidden;
     border-radius: 5px;
     transform: translate(-50%, -50%);
     position: absolute;
     top: 150%;
     left: 50%;
-    transition: top 0.5s ease-out;
+    transition: top 0.5s ease-out 0.1s;
     z-index: 2;
     &.active{
         top: 50%;
-        transition: top 0.2s ease-out;
     }
 
     &-header{
@@ -19,7 +23,7 @@
         border-bottom: 2px solid var(--text-color);
         display: flex;
         justify-content: space-between;
-        padding: calc(var(--padding) / 2);
+        padding: 10px;
         align-items: center;
         height: 30%;
         &-title{
@@ -37,7 +41,7 @@
     }
     &-body{
         background-color: var(--secondary-background-color);
-        padding: calc(var(--padding) / 2);
+        padding: 10px;
         height: 70%;
 
 

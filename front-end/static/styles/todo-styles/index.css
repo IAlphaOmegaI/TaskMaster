@@ -22,15 +22,19 @@
   display: flex;
   align-items: center;
   gap: 2.5px;
+  height: 100%;
 }
 #app.todo #app-contents .hashtags-list-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--primary-background-color);
   height: calc(100% - 6px);
   padding: 3px 5px;
   color: var(--secondary-color);
   font-family: var(--primary-font);
   font-size: var(--text-font-size);
-  border-radius: 5px;
+  border-radius: 10px;
   animation: hashtag-animation 0.3s forwards;
 }
 @keyframes hashtag-animation {
@@ -62,6 +66,7 @@
   font-family: var(--primary-font);
   padding: 3px 5px 3px 0;
   width: 90%;
+  height: 100%;
 }
 #app.todo #app-contents .hashtags-field-icon {
   font-size: var(--text-font-size);

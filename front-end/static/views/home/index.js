@@ -1,11 +1,18 @@
-const noteThumbnailReturner = async ({ noteBackground }, noteName, noteId, noteLocation, noteHashtags) => {
+const noteThumbnailReturner = async (
+  { noteBackground },
+  noteName,
+  noteId,
+  noteLocation,
+  noteHashtags
+) => {
+  console.warn(noteHashtags)
   var mostUsedColor;
   const img = $(`<img class="note-background" src="${noteBackground}"/>`);
-  await new Promise ((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     img[0].onload = () => {
-      console.log( img[0].naturalWidth)
+      console.log(img[0].naturalWidth);
       const canvas = $(`<canvas width="${200}" height="${200}">`);
-      const ctx = canvas[0].getContext('2d');
+      const ctx = canvas[0].getContext("2d");
       ctx.drawImage(img[0], 0, 0);
       const imageData = ctx.getImageData(0, 0, 200, 200);
       const data = imageData.data;
@@ -35,17 +42,17 @@ const noteThumbnailReturner = async ({ noteBackground }, noteName, noteId, noteL
           maxCount = count;
         }
       }
-      
+
       resolve();
     };
-    img.onerror = error => reject(error);
-  })
+    img.onerror = (error) => reject(error);
+  });
   // Log the most used color
   console.log(mostUsedColor);
   return /*html*/ `
-    <div class="note" data-id="${noteId}" data-link href="/todo/${noteId}" data-for="${noteLocation}" data-hashtags="${noteHashtags.join(',')}">
+    <div class="note ${window.globals.noteLocation == noteLocation ? '' : 'disabled'}" data-id="${noteId}" data-link href="/todo/${noteId}" data-for="${noteLocation}" data-hashtags="${noteHashtags}">
       <span class="note-title">${noteName}</span>
-      ${img.prop('outerHTML')}
+      ${img.prop("outerHTML")}
       <div class="note-gradient" style="background: linear-gradient(90deg, rgba(0,0,0,0.5) 40%, ${mostUsedColor} 95%);"></div>
       <div class="note-go">
         <i class="fa-solid fa-arrow-right note-go-icon"></i>
@@ -56,30 +63,55 @@ const noteThumbnailReturner = async ({ noteBackground }, noteName, noteId, noteL
 
 // Helper function to convert RGB values to a hex string
 function rgbToHex(r, g, b) {
-  return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+  return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
-const hashtagsReturner = (hashtag, location) => /*html*/`
-  <div class="hashtag">
-    <span class="hashtag-value" data-for="${location}">${hashtag}</span>
+const hashtagsReturner = (hashtag, location) => /*html*/ `
+  <div class="hashtag ${window.globals.noteLocation == location ? '' : 'disabled'}"" data-for="${location}">
+    <span class="hashtag-value" >${hashtag}</span>
     <div class="hashtag-line"></div>
   </div>
 `;
 
 const homeReturner = async (notesArray, hashtagsArray) => {
-  let notesHtml = '';
-  for (const { noteConfigs, noteValue, noteName, id, noteLocation, hashtagsArray } of notesArray) {
-    const noteHtml = await noteThumbnailReturner(noteConfigs, noteName, id, noteLocation, hashtagsArray);
+  let notesHtml = "";
+  for (const {
+    noteConfigs,
+    noteValue,
+    noteName,
+    id,
+    noteLocation,
+    hashtagsArray,
+  } of notesArray) {
+    const noteHtml = await noteThumbnailReturner(
+      noteConfigs,
+      noteName,
+      id,
+      noteLocation,
+      hashtagsArray
+    );
     notesHtml += noteHtml;
   }
   return /*html*/ `
     <div id="app-contents" data-animation="animate-in-bottom-to-top">
       <div class="hashtags">
-        ${hashtagsArray.map(({ hashtagLocation, value }) => hashtagsReturner(value, hashtagLocation)).join('')}
+      <div class="hashtag active view-all">
+        <span class="hashtag-value" data-for="${Object.keys(
+          window.globals.user.info.folders
+        ).join(",")}">View All</span>
+        <div class="hashtag-line"></div>
+      </div>
+        ${hashtagsArray
+          .map(({ hashtagLocation, value }) =>
+            hashtagsReturner(value, hashtagLocation)
+          )
+          .join("")}
       </div>
       <div class="notes">
-        <div class="notes-sizer"></div>
-        ${notesHtml}
+        <div class="notes-container">
+          <div class="notes-container-sizer"></div>
+          ${notesHtml}
+        </div>
       </div>
       <div class="add" data-link href="/todo/new-note">
         <i class="fi fi-sr-add-document add-icon"></i>

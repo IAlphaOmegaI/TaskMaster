@@ -15,7 +15,19 @@ import {
   getDoc,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+//
+function addObjectToSet(set, obj) {
+  // Check if the set already contains an object with the same content
+  for (const item of set) {
+    if (JSON.stringify(item) === JSON.stringify(obj)) {
+      // The set already contains an object with the same content, so don't add the new object
+      return;
+    }
+  }
 
+  // The set does not contain an object with the same content, so add the new object
+  set.add(obj);
+}
 const dynamicViewInteraface = {
   'todo': async ({id}, appFunc, navFunc) => {
     //when you come here you come with an id from th link that you were routed from
@@ -161,10 +173,11 @@ const dynamicViewInteraface = {
               notesArray.push(window.globals.notes[id]);
               console.log(window.globals.notes[id])
               const {hashtagsArray} = window.globals.notes[id];
-              hashtagsArray.forEach( hashtag => hashtagsSet.add({
+              hashtagsArray.forEach( hashtag => addObjectToSet( hashtagsSet, {
                 hashtagLocation: folderLocation,
                 value: hashtag.toLowerCase(),
               }))
+              console.log(hashtagsSet)
             }
 
           } 

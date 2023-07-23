@@ -1,5 +1,5 @@
 const navItemReturner = (name, className, hashtagsArr, i) => /*html*/`
-<h1 class="nav-items-item ${i === 0 ? 'selected' : ''}" data-hashtags="${hashtagsArr.join(',')}">
+<h1 class="nav-items-item ${name === window.globals.noteLocation ? 'selected' : ''}" data-hashtags="${hashtagsArr.join(',')}">
     <i class="fi fi-rr-${className} nav-items-item-icon"></i>
     ${name}
     <i class="nav-items-item-eleminate fi fi-sr-minus-circle"></i>

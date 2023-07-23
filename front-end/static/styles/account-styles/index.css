@@ -3,43 +3,26 @@
 #app.account {
   height: 100%;
 }
-#app.account .content {
+#app.account #app-contents {
+  height: 100%;
+  background-color: var(--primary-background-color);
+}
+#app.account #app-contents .content {
   width: 100%;
   display: flex;
   height: 100%;
+  align-items: center;
+  justify-content: center;
 }
-#app.account .content-column {
-  height: 100%;
+#app.account #app-contents .content-column {
   width: 50%;
   position: relative;
+  display: none;
 }
-#app.account .content-column.active .content-column-image {
-  opacity: 1;
-  z-index: 10;
+#app.account #app-contents .content-column.active {
+  display: unset;
 }
-#app.account .content-column.active .content-column-container {
-  opacity: 0;
-}
-#app.account .content-column-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: calc(100% - 20px);
-  height: calc(100% - 20px);
-  transition: opacity 0.5s ease;
-  z-index: -1;
-  opacity: 0;
-  margin: 10px;
-  overflow: hidden;
-  border-radius: 5px;
-}
-#app.account .content-column-image-content {
-  position: absolute;
-  width: 100%;
-  bottom: 0px;
-  left: 0px;
-}
-#app.account .content-column-container {
+#app.account #app-contents .content-column-container {
   opacity: 1;
   width: 100%;
   height: 100%;
@@ -49,7 +32,7 @@
   justify-content: center;
   transition: opacity 0.5s ease;
 }
-#app.account .content-column-container-header {
+#app.account #app-contents .content-column-container-header {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -57,17 +40,17 @@
   flex-flow: nowrap column;
   align-items: center;
 }
-#app.account .content-column-container-header-title {
+#app.account #app-contents .content-column-container-header-title {
   font-family: var(--ternary-font);
   font-size: var(--primary-font-size);
   color: var(--text-color);
 }
-#app.account .content-column-container-header-subtitle {
+#app.account #app-contents .content-column-container-header-subtitle {
   font-family: var(--primary-font);
   color: var(--secondary-color);
   font-size: var(--text-font-size);
 }
-#app.account .content-column-container-header-button {
+#app.account #app-contents .content-column-container-header-button {
   border-radius: 15px;
   padding: calc(var(--padding) / 2) calc(var(--padding) * 2);
   background-color: var(--secondary-color);
@@ -81,43 +64,43 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-#app.account .content-column-container-header-button-icon {
+#app.account #app-contents .content-column-container-header-button-icon {
   font-size: var(--text-font-size);
   color: var(--primary-background-color);
   transition: all 0.2s ease;
 }
-#app.account .content-column-container-header-button:hover {
+#app.account #app-contents .content-column-container-header-button:hover {
   color: var(--secondary-color);
   background-color: var(--primary-background-color);
 }
-#app.account .content-column-container-header-button:hover .content-column-container-header-button-icon {
+#app.account #app-contents .content-column-container-header-button:hover .content-column-container-header-button-icon {
   color: var(--secondary-color);
 }
-#app.account .content-column-container-divider {
+#app.account #app-contents .content-column-container-divider {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#app.account .content-column-container-divider-line {
+#app.account #app-contents .content-column-container-divider-line {
   width: 46.125%;
   height: 2px;
   background-color: var(--text-color);
 }
-#app.account .content-column-container-divider-title {
+#app.account #app-contents .content-column-container-divider-title {
   font-size: var(--text-font-size);
   color: var(--secondary-color);
   font-family: var(--ternary-font);
   width: 7.5%;
   text-align: center;
 }
-#app.account .content-column-container-content {
+#app.account #app-contents .content-column-container-content {
   display: flex;
   flex-flow: nowrap column;
   align-items: flex-start;
   width: 80%;
 }
-#app.account .content-column-container-content-field {
+#app.account #app-contents .content-column-container-content-field {
   display: flex;
   flex-flow: nowrap column;
   align-items: flex-start;
@@ -125,16 +108,16 @@
   margin: calc(var(--padding) / 2) 0;
   position: relative;
 }
-#app.account .content-column-container-content-field-title {
+#app.account #app-contents .content-column-container-content-field-title {
   color: var(--secondary-color);
   font-size: var(--text-font-size);
   font-family: var(--primary-font);
   transition: color 0.2s ease;
 }
-#app.account .content-column-container-content-field-title.title-error {
+#app.account #app-contents .content-column-container-content-field-title.title-error {
   color: var(--error);
 }
-#app.account .content-column-container-content-field-input {
+#app.account #app-contents .content-column-container-content-field-input {
   background-color: var(--ternary-background-color);
   border: none;
   border-radius: 5px;
@@ -150,12 +133,12 @@
   transition: all 0.2s ease;
   border: transparent 2px solid;
 }
-#app.account .content-column-container-content-field-input.error {
+#app.account #app-contents .content-column-container-content-field-input.error {
   border: solid 2px var(--error);
   animation: shake 0.5s;
   transform-origin: 50% 50%;
 }
-#app.account .content-column-container-content-field-input.profile-picture {
+#app.account #app-contents .content-column-container-content-field-input.profile-picture {
   width: auto;
   height: auto;
   background-color: var(--text-color);
@@ -164,7 +147,7 @@
   font-size: var(--text-font-size);
   padding: calc(var(--padding) / 2);
 }
-#app.account .content-column-container-content-field-preview {
+#app.account #app-contents .content-column-container-content-field-preview {
   position: absolute;
   transform: translateY(-50%);
   top: 50%;
@@ -174,13 +157,13 @@
   border-radius: 40%;
   border: 2px solid var(--text-color);
 }
-#app.account .content-column-container-content-check {
+#app.account #app-contents .content-column-container-content-check {
   width: 100%;
   display: flex;
   align-items: center;
   gap: 10px;
 }
-#app.account .content-column-container-content-check-input {
+#app.account #app-contents .content-column-container-content-check-input {
   border-radius: 5px;
   background-color: var(--text-color);
   width: var(--primary-font-size);
@@ -188,10 +171,10 @@
   position: relative;
   transition: background-color 0.2s ease;
 }
-#app.account .content-column-container-content-check-input.checked {
+#app.account #app-contents .content-column-container-content-check-input.checked {
   background-color: var(--ternary-background-color);
 }
-#app.account .content-column-container-content-check-input.checked::after {
+#app.account #app-contents .content-column-container-content-check-input.checked::after {
   content: "✔️";
   position: absolute;
   top: 50%;
@@ -201,15 +184,15 @@
   height: 100%;
   font-size: var(--secondary-font-size);
 }
-#app.account .content-column-container-content-check-input:hover {
+#app.account #app-contents .content-column-container-content-check-input:hover {
   background-color: var(--secondary-color);
 }
-#app.account .content-column-container-content-check-title {
+#app.account #app-contents .content-column-container-content-check-title {
   color: var(--secondary-color);
   font-family: var(--primary-font);
   font-size: var(--text-font-size);
 }
-#app.account .content-column-container-button {
+#app.account #app-contents .content-column-container-button {
   margin: var(--padding) 0;
   border-radius: 20px;
   box-sizing: border-box;
@@ -221,15 +204,15 @@
   align-items: center;
   transition: background-color 0.2s ease;
 }
-#app.account .content-column-container-button-title {
+#app.account #app-contents .content-column-container-button-title {
   color: var(--primary-background-color);
   font-size: var(--secondary-font-size);
   font-family: var(--ternary-font);
 }
-#app.account .content-column-container-button:hover {
+#app.account #app-contents .content-column-container-button:hover {
   background-color: var(--secondary-color) !important;
 }
-#app.account .content-column-container-instead {
+#app.account #app-contents .content-column-container-instead {
   color: var(--secondary-color);
   font-size: var(--text-font-size);
   font-family: var(--primary-font);
@@ -237,18 +220,18 @@
   transition: color 0.5s ease;
   cursor: pointer;
 }
-#app.account .content-column-container-instead-span {
+#app.account #app-contents .content-column-container-instead-span {
   color: var(--text-color);
   font-family: var(--ternary-font);
   transition: color 0.5s ease;
 }
-#app.account .content-column-container-instead:hover {
+#app.account #app-contents .content-column-container-instead:hover {
   color: var(--text-color);
 }
-#app.account .content-column-container-instead:hover .content-column-container-instead-span {
+#app.account #app-contents .content-column-container-instead:hover .content-column-container-instead-span {
   color: var(--secondary-color);
 }
-#app.account .content-column-container-error {
+#app.account #app-contents .content-column-container-error {
   color: var(--error);
   font-size: var(--text-font-size);
   font-family: var(--primary-font);

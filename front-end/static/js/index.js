@@ -1,6 +1,4 @@
 import View from "./views/View.js";
-
-// import { todoHandler } from "/static/js/routes/todo.js";
 //a history array that saves all the pages link the user visited
 const historyArr = [];
 let lastHistoryState;
@@ -13,12 +11,16 @@ const routes = {
     route: "Home",
     path: "/",
     callback: () => {
-      console.log('ji')
-      $('.notes').masonry({
-        itemSelector: '.note',
-        columnWidth: '.notes-sizer',
-        percentPosition: true,
-        gutter: 5,
+      // initialize Packery
+      $('.notes-container').imagesLoaded( function() {
+        // initialize Packery after all images have loaded
+        const grid = $('.notes-container').packery({
+          itemSelector: '.note',
+          columnWidth: '.notes-container-sizer',
+          percentPosition: true,
+        });
+        var items = grid.find('.note').draggable();
+        grid.packery( 'bindUIDraggableEvents', items );
       });
     }
   },
@@ -58,9 +60,11 @@ const getParams = (match) => {
 
 //
 const router = async () => {
+  //adding the class loading to indicate to the user that the page is responsive
+  $('html').addClass('loading');
+  //
   const potentialMatches = Object.keys(routes).map((key, i) => {
     const route = routes[key];
-
     return {
       ...route,
       result: location.pathname.match(pathToRegEx(route.path)),
@@ -93,6 +97,8 @@ const router = async () => {
   }
   setTimeout(
     () => {
+      //removing the loading class
+      $('html').removeClass('loading');
       $("#app")
         .attr("class", "")
         .addClass(match.route.toLowerCase())
@@ -118,3 +124,15 @@ $(document).on("click", "[data-link]", function (e) {
   const link = $(this).attr("href");
   navigateTo(link);
 });
+//also an animation for all the icons on the page
+$(document).on('mouseenter', '.fi', function() {
+  const s = $(this);
+  const newClass = s.attr('class').replace('-rr-', '-sr-');
+  s.attr('class', newClass)
+})
+$(document).on('mouseleave', '.fi', function() {
+  const s = $(this);
+  const newClass = s.attr('class').replace('-sr-', '-rr-');
+  s.attr('class', newClass)
+
+})

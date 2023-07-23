@@ -11,32 +11,67 @@
   height: 92% !important;
   overflow-y: scroll;
   overflow-x: hidden;
+  border-radius: 10px;
+  padding: calc(var(--padding) + 2.5px) var(--padding);
+  background-color: var(--secondary-background-color);
 }
-#app.home #app-contents .notes-sizer {
+#app.home #app-contents .notes::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 5px;
+  background-color: var(--primary-background-color);
+}
+#app.home #app-contents .notes::-webkit-scrollbar-thumb {
+  width: 2px;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+}
+#app.home #app-contents .notes-container {
+  width: 100%;
+  right: -5px;
+  position: relative;
+}
+#app.home #app-contents .notes-container-sizer {
   width: 33.33%;
 }
-#app.home #app-contents .notes .note {
+#app.home #app-contents .notes-container .note {
   width: calc(33.33% - 10px);
   margin: 0 0 10px;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
 }
-#app.home #app-contents .notes .note-background {
+#app.home #app-contents .notes-container .note:not(.disabled) {
+  animation: pop-in 0.4s forwards;
+}
+#app.home #app-contents .notes-container .note.disabled {
+  animation: pop-out 0.4s forwards;
+}
+#app.home #app-contents .notes-container .note.is-positioning-post-drag {
+  z-index: 20;
+}
+#app.home #app-contents .notes-container .note.ui-draggable-dragging {
+  z-index: 20;
+  outline: 3px dashed var(--text-color);
+  border-radius: 10px;
+  outline-offset: 6px;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: transform 0.2s ease;
+}
+#app.home #app-contents .notes-container .note-background {
   width: 100%;
   display: block;
   border-radius: 10px;
 }
-#app.home #app-contents .notes .note-gradient {
+#app.home #app-contents .notes-container .note-gradient {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: calc(100% + 5px);
-  height: calc(100% + 5px);
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
   border-radius: 10px;
 }
-#app.home #app-contents .notes .note-title {
+#app.home #app-contents .notes-container .note-title {
   padding: 5px 15px;
   background-color: var(--primary-background-color);
   border-radius: 5px;
@@ -52,7 +87,7 @@
   text-overflow: ellipsis;
   z-index: 10;
 }
-#app.home #app-contents .notes .note-go {
+#app.home #app-contents .notes-container .note-go {
   position: absolute;
   background-color: var(--primary-background-color);
   height: var(--primary-font-size);
@@ -63,10 +98,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
-#app.home #app-contents .notes .note-go-icon {
+#app.home #app-contents .notes-container .note-go-icon {
   font-size: var(--text-font-size);
   color: var(--secondary-color);
+}
+#app.home #app-contents .notes-container .note:hover .note-go {
+  animation: colorChange 1s;
+}
+#app.home #app-contents .notes-container .note:hover .note-go-icon {
+  animation: moveOutsideAndInside 1s;
 }
 #app.home #app-contents .hashtags {
   width: 100%;
@@ -108,8 +150,8 @@
 }
 #app.home #app-contents .add {
   position: absolute;
-  bottom: 0px;
-  right: var(--padding);
+  bottom: 0;
+  right: 0;
   border-radius: 20px;
   max-width: calc(var(--primary-font-size) * 1.5);
   height: calc(var(--primary-font-size) * 1.5);
@@ -143,4 +185,43 @@
 #app.home #app-contents .add:hover .add-title {
   opacity: 1 !important;
   transition-delay: 0.2s;
+}
+
+@keyframes moveOutsideAndInside {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(200%);
+  }
+  51% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes colorChange {
+  0% {
+    background-color: var(--secondary-background-color);
+  }
+  100% {
+    background: var(--primary-color);
+  }
+}
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pop-out {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
 }/*# sourceMappingURL=index.css.map */

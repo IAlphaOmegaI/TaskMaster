@@ -11,7 +11,7 @@ const randomHexGenerator = () =>
 //
 const defaults = {
  defaultProfilePicture: '/static/assets/images/overall/default-profile-picture.jpg',
- templateUserData: (metaData = null, uid= randomHexGenerator(), name = 'user', email = 'local.user@task-master.com', profilePictureParam = '/static/assets/images/overall/default-profile-picture.jpg', folders = [['Notes', "edit", [], []], ['ToDo-s', "assept-document", [], []], ['Music', "music", [], []], ['Movies', "camer-movie", [], []]] ) => 
+ templateUserData: (metaData = null, uid= randomHexGenerator(), name = 'user', email = 'local.user@task-master.com', profilePictureParam = '/static/assets/images/overall/default-profile-picture.jpg', folders = [['Notes', "edit", [], []], ['ToDo-s', "assept-document", [], []], ['Music', "music", [], []], ['Movies', "camera-movie", [], []]] ) => 
       { 
       const userData =  {
         metaData: metaData,
