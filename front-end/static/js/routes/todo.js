@@ -126,7 +126,7 @@ $(document).on("click", "#note-save", async function () {
     hashtagsArray: hashtags,
     noteLocation: noteLocation,
   };
-  console.log(noteData)
+  // console.log(noteData)
   //
   const id = $('.note').data('id');
   const loggedInOrNot = globals.verified;
@@ -157,10 +157,13 @@ $(document).on("click", "#note-save", async function () {
      if(loggedInOrNot){
       console.log(`%cUser is logged in`, 'color:blue; background-color: white');
       // * user is logged in and they're trying to create a note in the firebase
-      console.warn(noteData)
-      const userRef = collection(db, 'notes')
-      const docRef = await addDoc( userRef, noteData)
+      // console.warn(noteData)
+      const noteRef = collection(db, 'notes')
+      const docRef = await addDoc( noteRef, noteData)
       noteData.id = docRef.id;
+      //we need to update the user object in the firebase aswell so that they have the notes array set up
+      const userRef = doc(db, 'users', window.globals.user.info.uid);
+      updateDoc(userRef, window.globals.user)
      } else {
         console.log(`%cUser is NOT logged in`, 'color:blue; background-color: white');
         // * user is not logged in and theyre trying to create a doc in the localstorage
@@ -182,7 +185,7 @@ const hashtagsReturner = (hashtag) =>
 //the function that is meant to execute on the button click and enter press
 const addNewHashtag = () => {
   const valueTarget = $("#hashtag-input");
-  const value = valueTarget.val();
+  const value = valueTarget.val().toLowerCase();
   const target = $(".hashtags-list");
   if (value) {
     valueTarget.val("");

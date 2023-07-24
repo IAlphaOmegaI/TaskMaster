@@ -40,22 +40,14 @@
   overflow: hidden;
   position: relative;
 }
-#app.home #app-contents .notes-container .note:not(.disabled) {
-  animation: pop-in 0.4s forwards;
-}
 #app.home #app-contents .notes-container .note.disabled {
-  animation: pop-out 0.4s forwards;
+  display: none;
 }
 #app.home #app-contents .notes-container .note.is-positioning-post-drag {
   z-index: 20;
 }
-#app.home #app-contents .notes-container .note.ui-draggable-dragging {
+#app.home #app-contents .notes-container .note.is-dragging {
   z-index: 20;
-  outline: 3px dashed var(--text-color);
-  border-radius: 10px;
-  outline-offset: 6px;
-  -webkit-transition: -webkit-transform 0.2s;
-  transition: transform 0.2s ease;
 }
 #app.home #app-contents .notes-container .note-background {
   width: 100%;
@@ -118,16 +110,19 @@
   background-color: var(--secondary-background-color);
   display: flex;
   align-items: center;
-  padding: 0 5px;
+  padding: 0 10px;
+  gap: 5px;
 }
 #app.home #app-contents .hashtags .hashtag {
   height: calc(100% - 10px);
-  margin: 10px 0;
-  padding: 0 5px;
+  padding: 0 10px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+}
+#app.home #app-contents .hashtags .hashtag.disabled {
+  display: none;
 }
 #app.home #app-contents .hashtags .hashtag-value {
   color: var(--secondary-color);
@@ -224,4 +219,11 @@
   100% {
     transform: scale(0);
   }
+}
+.packery-drop-placeholder {
+  outline: 3px dashed var(--text-color);
+  border-radius: 10px;
+  outline-offset: -6px;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: transform 0.2s ease;
 }/*# sourceMappingURL=index.css.map */

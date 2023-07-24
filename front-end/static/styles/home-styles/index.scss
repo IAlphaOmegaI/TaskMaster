@@ -42,23 +42,19 @@
                     border-radius: 10px;
                     overflow: hidden;
                     position: relative;
-                    &:not(.disabled){
-                        animation: pop-in 0.4s forwards;
-                    }
+                    // &:not(.disabled){
+                    //     animation: pop-in 0.4s forwards;
+                    // }
                     &.disabled{
-                        animation: pop-out 0.4s forwards;
+                        // animation: pop-out 0.4s forwards;
+                        display: none;
                     }
 
                     &.is-positioning-post-drag {
                         z-index: 20;
                     }
-                    &.ui-draggable-dragging{
+                    &.is-dragging{
                         z-index: 20;
-                        outline: 3px dashed var(--text-color);
-                        border-radius: 10px;
-                        outline-offset: 6px;
-                        -webkit-transition: -webkit-transform 0.2s;
-                        transition: transform 0.2s ease;
                     }
 
                     &-background {
@@ -135,17 +131,19 @@
             background-color: var(--secondary-background-color);
             display: flex;
             align-items: center;
-            padding: 0 5px;
-
+            padding: 0 10px;
+            gap: 5px;
+           
             .hashtag {
                 height: calc(100% - 10px);
-                margin: 10px 0;
-                padding: 0 5px;
+                padding: 0 10px 0 0;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 position: relative;
-
+                &.disabled{
+                    display: none;
+                }
                 &-value {
                     color: var(--secondary-color);
                     font-size: var(--text-font-size);
@@ -255,4 +253,11 @@
     100%{
         transform: scale(0);
     }
+  }
+  .packery-drop-placeholder {
+    outline: 3px dashed var(--text-color);
+    border-radius: 10px;
+    outline-offset: -6px;
+    -webkit-transition: -webkit-transform 0.2s;
+    transition: transform 0.2s ease;
   }

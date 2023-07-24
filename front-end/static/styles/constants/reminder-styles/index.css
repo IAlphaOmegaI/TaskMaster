@@ -1,0 +1,18 @@
+.reminder {
+  width: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--text-color) 32%, var(--primary-color) 100%);
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--padding);
+}
+.reminder-title {
+  color: var(--primary-background-color);
+  font-family: var(--ternary-font);
+  font-size: var(--secondary-font-size);
+}
+.reminder-icon {
+  font-size: var(--secondary-font-size);
+}/*# sourceMappingURL=index.css.map */

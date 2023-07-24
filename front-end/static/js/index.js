@@ -11,17 +11,32 @@ const routes = {
     route: "Home",
     path: "/",
     callback: () => {
-      // initialize Packery
-      $('.notes-container').imagesLoaded( function() {
-        // initialize Packery after all images have loaded
-        const grid = $('.notes-container').packery({
-          itemSelector: '.note',
+      // var container = $('.notes-container').imagesLoaded( function (){
+      //   // init Isotope after all images have loaded
+      //   container.isotope({
+      //       // set itemSelector so .grid-sizer is not used in layout
+      //       itemSelector: '.note',
+      //       percentPosition: true,
+      //       masonry: {
+      //         // use element for option
+      //         columnWidth: '.notes-container-sizer'
+      //       }
+      //   });
+      // });
+      const container = $('.notes-container');
+      container.imagesLoaded(() => {
+        container.packery({
           columnWidth: '.notes-container-sizer',
+          itemSelector: '.note',
           percentPosition: true,
         });
-        var items = grid.find('.note').draggable();
-        grid.packery( 'bindUIDraggableEvents', items );
-      });
+       container.find('.note').each((i, note) => {
+        var draggie = new Draggabilly(note);
+        // bind drag events to Packery
+        container.packery( 'bindDraggabillyEvents', draggie );
+       })
+      })
+     
     }
   },
 
@@ -98,7 +113,6 @@ const router = async () => {
   setTimeout(
     () => {
       //removing the loading class
-      $('html').removeClass('loading');
       $("#app")
         .attr("class", "")
         .addClass(match.route.toLowerCase())
@@ -113,6 +127,8 @@ const router = async () => {
       //and a few extra attributes
       if(match.callback)
         match.callback()
+      $('html').removeClass('loading');
+      
     }, 500 );
 };
 

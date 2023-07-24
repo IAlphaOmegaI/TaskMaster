@@ -26,7 +26,7 @@ const defaultNavReturner = ({name, profilePicture, folders}, loggedInOrNot) => /
                 </div>
             </div>
             <div class="nav-settings">
-                <h1 class="nav-settings-item" id="nav-user" href="/account" data-link  data-status="${loggedInOrNot ? 'logged-in' : 'logged-out'}">
+                <h1 class="nav-settings-item" id="nav-user" ${loggedInOrNot ? 'data-status="logged-in"' : 'data-status="logged-out" data-link  href="/account"'}">
                     <i class="fi fi-rr-${loggedInOrNot ? 'exit' : 'enter'} nav-settings-item-icon" id="nav-user-icon"></i>
                     <span class=" nav-settings-item-title">${loggedInOrNot ? 'Log Out' : 'Log In'}</span>
                 </h1>

@@ -5,12 +5,10 @@ const noteThumbnailReturner = async (
   noteLocation,
   noteHashtags
 ) => {
-  console.warn(noteHashtags)
   var mostUsedColor;
   const img = $(`<img class="note-background" src="${noteBackground}"/>`);
   await new Promise((resolve, reject) => {
     img[0].onload = () => {
-      console.log(img[0].naturalWidth);
       const canvas = $(`<canvas width="${200}" height="${200}">`);
       const ctx = canvas[0].getContext("2d");
       ctx.drawImage(img[0], 0, 0);
@@ -48,14 +46,13 @@ const noteThumbnailReturner = async (
     img.onerror = (error) => reject(error);
   });
   // Log the most used color
-  console.log(mostUsedColor);
   return /*html*/ `
-    <div class="note ${window.globals.noteLocation == noteLocation ? '' : 'disabled'}" data-id="${noteId}" data-link href="/todo/${noteId}" data-for="${noteLocation}" data-hashtags="${noteHashtags}">
-      <span class="note-title">${noteName}</span>
+    <div class="note ${window.globals.noteLocation == noteLocation ? '' : 'disabled'}" data-id="${noteId}"  data-for="${noteLocation}" data-hashtags="${noteHashtags}">
+      <span class="note-title" data-link href="/todo/${noteId}" >${noteName}</span>
       ${img.prop("outerHTML")}
       <div class="note-gradient" style="background: linear-gradient(90deg, rgba(0,0,0,0.5) 40%, ${mostUsedColor} 95%);"></div>
-      <div class="note-go">
-        <i class="fa-solid fa-arrow-right note-go-icon"></i>
+      <div class="note-go" data-link href="/todo/${noteId}">
+        <i class="fi fi-rr-arrow-right note-go-icon"></i>
       </div>
     </div>
   `;
@@ -108,8 +105,13 @@ const homeReturner = async (notesArray, hashtagsArray) => {
           .join("")}
       </div>
       <div class="notes">
+        <div class="reminder" data-link href="/account" style="${window.globals.verified === true ? 'display:none' : ''}">
+          <span class="reminder-title">Log In to sync your notes to the cloud!</span>
+          <i class="fi fi-rr-cloud-upload reminder-icon"></i>
+        </div>
         <div class="notes-container">
           <div class="notes-container-sizer"></div>
+          <span class="notes-container-title" style="display:none">You don't have any notes, press the button in the corner of the screen to add one!</span>
           ${notesHtml}
         </div>
       </div>

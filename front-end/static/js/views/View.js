@@ -171,13 +171,13 @@ const dynamicViewInteraface = {
             } else {
               //user is not linked to the database
               notesArray.push(window.globals.notes[id]);
-              console.log(window.globals.notes[id])
+              // console.log(window.globals.notes[id])
               const {hashtagsArray} = window.globals.notes[id];
               hashtagsArray.forEach( hashtag => addObjectToSet( hashtagsSet, {
                 hashtagLocation: folderLocation,
                 value: hashtag.toLowerCase(),
               }))
-              console.log(hashtagsSet)
+              // console.log(hashtagsSet)
             }
 
           } 

@@ -243,7 +243,6 @@ $(document).on("click", ".content-column-container-button", async function () {
         //updating the global variables
         globals.verified = true;
         globals.user = defaults.templateUserData(
-          userCredential.user,
           userCredential.user.uid,
           userData.name,
           userData.email,
@@ -318,7 +317,6 @@ async function signInWithGoogle() {
     } else {
       //the user is signing in
       globals.user = defaults.templateUserData(
-        user,
         user.uid,
         user.displayName,
         user.email,
